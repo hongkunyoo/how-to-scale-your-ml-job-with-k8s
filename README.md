@@ -1,14 +1,8 @@
 ## Open Infrastructure & Cloud Native Days Korea 2019 Track 7
 
-*Hands on session*
+*Hands-on session*
+
 How to scale your ML job with Kubernetes
-
-개요설명: [발표자료](intro.pdf) (사내 검토 중)
-
-##### 워크샵 순서
-1. How to scale your ML job with k8s (개요설명)
-2. Provisioning K8S on AWS/GCP  (핸즈온)
-3. Data pipeline 구축 & Distributed ML 학습하기 (핸즈온)
 
 ### Prequisition
 - AWS 계정
@@ -17,11 +11,54 @@ How to scale your ML job with Kubernetes
   - Deployments
   - Services
   - Jobs
-  - Configmaps
+  - Ingress
 
-### Provisioning
+#### 워크샵 순서
+1. Why Kubernetes? (발표)
+2. Provisioning K8S on AWS/GCP  (핸즈온)
+3. Data pipeline 구축 & Distributed ML 학습하기 (핸즈온)
+
+### 1. Why Kubernetes?
+
+2019 AWS summit Seoul에서 발표한 "Amazon EKS를 활용하여 기계학습 서버 확장하기"를 토대로 워크샵을 진행합니다.
+- [slide](https://www.slideshare.net/awskorea/amazon-eks-lg-aws-summit-seoul-2019)
+- [video](https://www.youtube.com/watch?v=egv2TlfLL1Y&list=PLORxAVAC5fUXSZaun-15IvzUhO3YmvtdV)
+
+[워크샵 발표](whyk8s.pdf) (사내 검토 중)
+
+### 2. Provisioning K8S
 
 #### On AWS
+
+사용할 리소스
+- EKS: k8s 마스터
+- EC2: bastion 서버, worker 노드
+- ELB: Ingress
+- ECR: ML scripts
+- EFS: 모델 저장소
+- S3: 학습 데이터
+
+---
+
+##### eksctl
+
+##### aws-iam-authenticator
+
+##### kubectl
+
+##### autoscaling group
+
+##### helm
+
+##### helm chart
+- metrics-server
+- cluster-autoscaler
+- minio
+- efs-provisioner
+- prometheus
+- grafana
+- nginx-ingress
+- argo workflow
 
 ```bash
 CLUSTER_NAME=openinfra
