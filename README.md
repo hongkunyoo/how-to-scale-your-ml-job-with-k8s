@@ -3,6 +3,8 @@
 *Hands on session*
 How to scale your ML job with Kubernetes
 
+개요설명: [발표자료](intro.pdf) (사내 검토 중)
+
 ### Prequisition
 - AWS 계정
 - GCP 계정
