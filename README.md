@@ -5,6 +5,11 @@ How to scale your ML job with Kubernetes
 
 개요설명: [발표자료](intro.pdf) (사내 검토 중)
 
+##### 워크샵 순서
+1. How to scale your ML job with k8s (개요설명)
+2. Provisioning K8S on AWS/GCP  (핸즈온)
+3. Data pipeline 구축 & Distributed ML 학습하기 (핸즈온)
+
 ### Prequisition
 - AWS 계정
 - GCP 계정
