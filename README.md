@@ -1,7 +1,7 @@
 ## Open Infrastructure & Cloud Native Days Korea 2019 Track 7
 
+*Hands on session*
 How to scale your ML job with Kubernetes
-
 
 ### Prequisition
 - AWS 계정
@@ -140,9 +140,98 @@ helm install stable/cluster-autoscaler --name autoscale --namespace kube-system 
 ```
 ### Run ML jobs
 
+1. Basic Job
+
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: exp01-example
+spec:
+  template:
+    spec:
+      containers:
+      - name: ml
+        image: hongkunyoo/eks-ml:example
+        imagePullPolicy: Always
+        command: ["python", "train.py"]
+        args: ['5', 'softmax', '0.5']
+        resources:
+          requests:
+            cpu: "0.5"
+            memory: "3Gi"
+          limits:
+            cpu: "1"
+            memory: "5Gi"
+      restartPolicy: Never
+  backoffLimit: 0
+```
 
 ### Build Data Pipeline
 
+1. Workflow hello world
 
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow                  # new type of k8s spec
+metadata:
+  generateName: hello-world-    # name of the workflow spec
+spec:
+  entrypoint: whalesay          # invoke the whalesay template
+  templates:
+  - name: whalesay              # name of the template
+    container:
+      image: docker/whalesay
+      command: [cowsay]
+      args: ["hello world"]
+      resources:                # limit the resources
+        limits:
+          memory: 32Mi
+          cpu: 100m
+```
 
+2. Multi step Data Pipeline
 
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: steps-
+spec:
+  entrypoint: hello-hello-hello
+
+  # This spec contains two templates: hello-hello-hello and whalesay
+  templates:
+  - name: hello-hello-hello
+    # Instead of just running a container
+    # This template has a sequence of steps
+    steps:
+    - - name: hello1            # hello1 is run before the following steps
+        template: whalesay
+        arguments:
+          parameters:
+          - name: message
+            value: "hello1"
+    - - name: hello2a           # double dash => run after previous step
+        template: whalesay
+        arguments:
+          parameters:
+          - name: message
+            value: "hello2a"
+      - name: hello2b           # single dash => run in parallel with previous step
+        template: whalesay
+        arguments:
+          parameters:
+          - name: message
+            value: "hello2b"
+
+  # This is the same template as from the previous example
+  - name: whalesay
+    inputs:
+      parameters:
+      - name: message
+    container:
+      image: docker/whalesay
+      command: [cowsay]
+      args: ["{{inputs.parameters.message}}"]
+```
