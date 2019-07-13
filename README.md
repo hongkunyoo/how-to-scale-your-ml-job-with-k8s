@@ -194,16 +194,13 @@ helm init --service-account default
 
 # before installing helm chart, change values
 vi charts/nfs-client-provisioner/vales.yaml
-```yaml
+# line 14
 nfs:
   server: !(FS_ID).efs.ap-northeast-2.amazonaws.com
-```
 
 vi charts/minio/vales.yaml
-```yaml
 # line 45
 efsFileSystemId: a(!FS_ID)
-```
 
 # install helm charts
 kubectl create ns ctrl
