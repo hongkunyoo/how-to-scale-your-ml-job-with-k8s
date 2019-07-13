@@ -72,8 +72,8 @@ extraArgs:
   # scale-down-non-empty-candidates-count: 5
   # max-node-provision-time: 15m0s
   # scan-interval: 10s
-  # scale-down-delay: 10m
-  # scale-down-unneeded-time: 10m
+  scale-down-delay: 4m
+  scale-down-unneeded-time: 4m
   # skip-nodes-with-local-storage: false
   # skip-nodes-with-system-pods: true
 
