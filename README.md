@@ -24,6 +24,7 @@ How to scale your ML job with Kubernetes
 - [video](https://www.youtube.com/watch?v=egv2TlfLL1Y&list=PLORxAVAC5fUXSZaun-15IvzUhO3YmvtdV)
 
 [워크샵 발표 내용](whyk8s.pdf) (사내 검토 중)
+![](intro.png)
 
 ## 2. Provisioning K8S
 
