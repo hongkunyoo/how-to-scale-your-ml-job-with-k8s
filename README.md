@@ -199,6 +199,9 @@ kubectl get pod -n ctrl
 #helm install stable/metrics-server --name stats --namespace kube-system --set 'args={--logtostderr,--metric-resolution=2s}'
 #helm install stable/cluster-autoscaler --name autoscale --namespace kube-system --set autoDiscovery.clusterName=$CLUSTER_NAME,awsRegion=$REGION,sslCertPath=/etc/kubernetes/pki/ca.crt
 ```
+
+---
+
 #### On GCP
 ![](k8s-ml-gcp.png)
 
