@@ -5,7 +5,7 @@
 How to scale your ML job with Kubernetes
 
 ### 워크샵 순서
-1. Why Kubernetes? (발표)
+[1. Why Kubernetes? (발표)](#1-why-kubernetes)
 2. Provisioning K8S on AWS / GCP  (핸즈온)
 3. Data pipeline 구축 & Distributed ML 학습하기 (핸즈온)
 
