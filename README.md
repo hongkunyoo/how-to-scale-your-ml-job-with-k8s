@@ -31,6 +31,7 @@ How to scale your ML job with Kubernetes
 Production 환경에서 제대로 클러스터를 구축한다면 private k8s 구축 및 도메인 네임 설정 & Ingress 설정을 해야하지만 본 워크샵에서는 생략하도록 하겠습니다.
 
 ### On AWS
+![](k8s-ml-aws.png)
 
 사용할 리소스
 - EKS: k8s 마스터
@@ -57,6 +58,7 @@ Production 환경에서 제대로 클러스터를 구축한다면 private k8s �
           "ec2:*",
           "eks:*",
           "iam:*",
+          "elasticfilesystem:*",
           "cloudformation:*"
       ],
       "Resource": "*"
@@ -129,6 +131,8 @@ aws configure
 CLUSTER_NAME=k8s-ml
 REGION=ap-northeast-2
 
+FS_ID=$(aws efs create-file-system --creation-token $CLUSTER_NAME --profile k8s-ml | jq -r .FileSystemId)
+
 # installing eksctl
 curl --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 mv /tmp/eksctl /usr/local/bin
@@ -149,7 +153,7 @@ apt-get install -y kubectl
 eksctl create cluster --name $CLUSTER_NAME --region $REGION --without-nodegroup
 
 # default worker node 구성
-eksctl create nodegroup --cluster $CLUSTER_NAME --name controller --nodes-min 1 --nodes-max 1 --nodes 1 --node-labels "role=default" --node-type m5.xlarge --asg-access
+eksctl create nodegroup --cluster $CLUSTER_NAME --name default --nodes-min 1 --nodes-max 1 --nodes 1 --node-labels "role=default" --node-type m5.xlarge --asg-access
 
 # CPU worker node 구성
 eksctl create nodegroup --cluster $CLUSTER_NAME --name train-cpu --nodes-min 1 --nodes-max 3 --nodes 2 --node-labels "role=train-cpu" --node-type c5.xlarge
@@ -196,6 +200,7 @@ kubectl get pod -n ctrl
 #helm install stable/cluster-autoscaler --name autoscale --namespace kube-system --set autoDiscovery.clusterName=$CLUSTER_NAME,awsRegion=$REGION,sslCertPath=/etc/kubernetes/pki/ca.crt
 ```
 #### On GCP
+![](k8s-ml-gcp.png)
 
 사용할 리소스
 - GKE: k8s 마스터
