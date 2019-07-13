@@ -1,5 +1,4 @@
 # Open Infrastructure & Cloud Native Days Korea 2019 Track 7
-
 *Hands-on session*
 
 How to scale your ML job with Kubernetes
