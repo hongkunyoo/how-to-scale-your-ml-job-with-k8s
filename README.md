@@ -115,7 +115,7 @@ http://console.aws.amazon.com
 
 ```bash
 # install jq
-sudo apt-get update && sudo apt-get install -y jq
+sudo apt-get update && sudo apt-get install -y jq apt-transport-https
 
 # install awscli
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
@@ -143,19 +143,18 @@ aws s3 mb s3://$BUCKET_NAME
 
 # installing eksctl
 curl --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-mv /tmp/eksctl /usr/local/bin
+sudo mv /tmp/eksctl /usr/local/bin
 
 # installing heptio-authenticator
 curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.11.5/2018-12-06/bin/linux/amd64/aws-iam-authenticator
 chmod +x ./aws-iam-authenticator
-mv aws-iam-authenticator /usr/local/bin
+sudo mv aws-iam-authenticator /usr/local/bin
 
 # installing kubectl
-apt-get update && apt-get install -y apt-transport-https
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list
-apt-get update
-apt-get install -y kubectl
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+sudo apt-get install -y kubectl
 
 # Create k8s cluster
 eksctl create cluster --name $CLUSTER_NAME --without-nodegroup
