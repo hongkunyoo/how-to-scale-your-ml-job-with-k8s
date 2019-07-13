@@ -4,6 +4,11 @@
 
 How to scale your ML job with Kubernetes
 
+### 워크샵 순서
+1. Why Kubernetes? (발표)
+2. Provisioning K8S on AWS / GCP  (핸즈온)
+3. Data pipeline 구축 & Distributed ML 학습하기 (핸즈온)
+
 ### Prequisition
 - AWS 계정 or GCP 계정
 - Kubernetes 기본 지식
@@ -11,11 +16,6 @@ How to scale your ML job with Kubernetes
   - Services
   - Jobs
   - Ingress
-
-#### 워크샵 순서
-1. Why Kubernetes? (발표)
-2. Provisioning K8S on AWS / GCP  (핸즈온)
-3. Data pipeline 구축 & Distributed ML 학습하기 (핸즈온)
 
 ### 1. Why Kubernetes?
 
@@ -37,21 +37,23 @@ How to scale your ML job with Kubernetes
 - EFS: 모델 저장소
 - S3: 학습 데이터
 
----
 
-##### eksctl
+#### 설치 목록
+
+###### eksctl
 [eksctl](https://github.com/weaveworks/eksctl)은 weaveworks에서 개발한 Amazon EKS CLI 툴입니다. 재밌는 것은 이것은 AWS에서 만든 것이 아니라 Kubernetes Network Provider중 하나인 weavenetwork를 만든 회사(Weaveworks)라는 회사에서 개발했다는 점입니다. 오늘 AWS 플랫폼 위에서는 eksctl을 이용하여 k8s 클러스터를 구축할 예정입니다.
 
-##### aws-iam-authenticator
+###### aws-iam-authenticator
 [aws-iam-authenticator](https://github.com/kubernetes-sigs/aws-iam-authenticator)도 마찬가지로 재밌는 사실은 원래는 heptio라는 회사에서 개발한 IAM 권한 획득 툴입니다. 현재는 kubernetes-sigs(special interest group)에서 관리합니다.
 EKS는 기본적으로 AWS IAM을 이용하여 k8s RBAC과 연동합니다. 이때 필요한 것이 aws-iam-authenticator라는 녀석입니다.  
 ![](https://docs.aws.amazon.com/eks/latest/userguide/images/eks-iam.png)
 
-##### kubectl
+###### kubectl
+[kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)은 쿠버네티스 마스터와 대화할 수 있는 CLI툴입니다.
 
-##### helm
+###### helm
 
-##### helm chart
+###### helm chart
 - metrics-server
 - cluster-autoscaler
 - minio
