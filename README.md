@@ -194,14 +194,24 @@ helm init --service-account default
 
 # before installing helm chart, change values
 vi charts/nfs-client-provisioner/vales.yaml
+```
+
+```yaml
 # line 14
 nfs:
   server: !(FS_ID).efs.ap-northeast-2.amazonaws.com
+```
 
+```bash
 vi charts/minio/vales.yaml
+```
+
+```yaml
 # line 45
 efsFileSystemId: a(!FS_ID)
+```
 
+```bash
 # install helm charts
 kubectl create ns ctrl
 helm install charts/argo-workflow --namespace ctrl
