@@ -1,17 +1,15 @@
-## Open Infrastructure & Cloud Native Days Korea 2019 Track 7
+# Open Infrastructure & Cloud Native Days Korea 2019 Track 7
 
 *Hands-on session*
 
 How to scale your ML job with Kubernetes
 
-### 워크샵 순서
+## 워크샵 순서
 1. [Why Kubernetes? (발표)](#1-why-kubernetes)
-   오늘 여기섬ㄴㅇㄹㅁㄴㅇㄹ
 2. [Provisioning K8S on AWS / GCP  (핸즈온)](#2-provisioning-k8s)
-   두번째 여기서는
 3. [How to scale your ML job (핸즈온)](#3-how-to-scale-your-ml-job)
 
-### Prequisition
+## Prequisition
 - AWS 계정 or GCP 계정
 - Kubernetes 기본 지식
   - Deployments
@@ -19,7 +17,7 @@ How to scale your ML job with Kubernetes
   - Jobs
   - Ingress
 
-### 1. Why Kubernetes?
+## 1. Why Kubernetes?
 
 2019 AWS summit Seoul에서 발표한 "Amazon EKS를 활용하여 기계학습 서버 확장하기"를 토대로 워크샵을 진행합니다.
 - [slide](https://www.slideshare.net/awskorea/amazon-eks-lg-aws-summit-seoul-2019)
@@ -27,9 +25,9 @@ How to scale your ML job with Kubernetes
 
 [워크샵 발표 내용](whyk8s.pdf) (사내 검토 중)
 
-### 2. Provisioning K8S
+## 2. Provisioning K8S
 
-#### On AWS
+### On AWS
 
 사용할 리소스
 - EKS: k8s 마스터
@@ -40,9 +38,9 @@ How to scale your ML job with Kubernetes
 - S3: 학습 데이터
 
 
-#### 설치 목록
+### 설치 목록
 
-##### eksctl
+#### eksctl
 [eksctl](https://github.com/weaveworks/eksctl)은 weaveworks에서 개발한 Amazon EKS CLI 툴입니다. 재밌는 것은 이것은 AWS에서 만든 것이 아니라 Kubernetes Network Provider중 하나인 weavenetwork를 만든 회사(Weaveworks)라는 회사에서 개발했다는 점입니다. 오늘 AWS 플랫폼 위에서는 eksctl을 이용하여 k8s 클러스터를 구축할 예정입니다.
 
 ##### aws-iam-authenticator
