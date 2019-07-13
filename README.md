@@ -44,7 +44,7 @@ Production 환경에서 제대로 클러스터를 구축한다면 private k8s �
 #### IAM User 생성 및 권한 부여
 1. EKS Admin policy 생성
 
-*IAM 접속 - Policies - Create policy - JSON*
+- *IAM 접속 - Policies - Create policy - JSON*
 ```json
 {
   "Version": "2012-10-17",
@@ -76,7 +76,7 @@ Production 환경에서 제대로 클러스터를 구축한다면 private k8s �
 - *Next Permissions*
 - *Attach existing policies directly*: EKS-admin 검색
 - *Next Tags* - *Next Review* - *Create user*
-
+- Access key, Secret key 저장
 
 #### 설치 목록
 
@@ -118,6 +118,12 @@ echo 'export PATH=$HOME/miniconda3/bin:$PATH' >> $HOME/.bashrc
 $HOME/miniconda3/bin/pip install awscli
 
 source $HOME/.bashrc
+
+# AWS user configure
+aws configure
+# access key: XXX
+# secret key: XXX
+# region: ap-northeast-2
 
 # 클러스터 이름과 리전을 설정합니다.
 CLUSTER_NAME=k8s-ml
