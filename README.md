@@ -113,6 +113,9 @@ helm chart는 helm을 통해 설치하는 패키지 레포지토리를 말합니
 http://console.aws.amazon.com
 
 ```bash
+# install jq
+sudo apt-get install jq
+
 # install awscli
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 /bin/bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda3 && rm Miniconda3-latest-Linux-x86_64.sh
@@ -129,9 +132,12 @@ aws configure
 
 # 클러스터 이름과 리전을 설정합니다.
 CLUSTER_NAME=k8s-ml
-REGION=ap-northeast-2
 
 FS_ID=$(aws efs create-file-system --creation-token $CLUSTER_NAME --profile k8s-ml | jq -r .FileSystemId)
+AWS_ID=$(aws sts get-caller-identity | jq -r .Account)
+
+BUCKET_NAME=k8s-ml-$(head -c 5 /dev/urandom | base64)
+aws s3 mb s3://$BUCKET_NAME
 
 # installing eksctl
 curl --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
@@ -150,7 +156,7 @@ apt-get update
 apt-get install -y kubectl
 
 # Create k8s cluster
-eksctl create cluster --name $CLUSTER_NAME --region $REGION --without-nodegroup
+eksctl create cluster --name $CLUSTER_NAME --without-nodegroup
 
 # default worker node 구성
 eksctl create nodegroup --cluster $CLUSTER_NAME --name default --nodes-min 1 --nodes-max 1 --nodes 1 --node-labels "role=default" --node-type m5.xlarge --asg-access
@@ -183,8 +189,21 @@ subjects:
   namespace: kube-system
 EOF
 
+# installing helm
 helm init --service-account default
-# Wait awhile
+
+# before installing helm chart, change values
+vi charts/nfs-client-provisioner/vales.yaml
+```yaml
+nfs:
+  server: !(FS_ID).efs.ap-northeast-2.amazonaws.com
+```
+
+vi charts/minio/vales.yaml
+```yaml
+# line 45
+efsFileSystemId: a(!FS_ID)
+```
 
 # install helm charts
 kubectl create ns ctrl
@@ -195,9 +214,6 @@ helm install charts/cluster-autoscaler --namespace ctrl
 helm install charts/metrics-server --namespace ctrl
 
 kubectl get pod -n ctrl
-
-#helm install stable/metrics-server --name stats --namespace kube-system --set 'args={--logtostderr,--metric-resolution=2s}'
-#helm install stable/cluster-autoscaler --name autoscale --namespace kube-system --set autoDiscovery.clusterName=$CLUSTER_NAME,awsRegion=$REGION,sslCertPath=/etc/kubernetes/pki/ca.crt
 ```
 
 ---
@@ -279,7 +295,8 @@ helm install charts/minio --namespace ctrl
 kubectl get pod -n ctrl
 ```
 
-### 콩동 설절
+### 공동설정
+
 #### Enable GPU
 
 ```bash
