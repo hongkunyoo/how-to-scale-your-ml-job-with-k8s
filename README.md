@@ -61,7 +61,7 @@ EKS는 기본적으로 AWS IAM을 이용하여 k8s RBAC과 연동합니다. 이�
 ##### helm chart
 helm chart는 helm을 통해 설치하는 패키지 레포지토리를 말합니다. 오늘은 다음 chart들을 설치해볼 예정입니다.
 - argo workflow
-- efs-provisioner
+- nfs-client-provisioner
 - minio
 - cluster-autoscaler
 - metrics-server
@@ -76,7 +76,7 @@ http://console.aws.amazon.com
 ```bash
 # 클러스터 이름과 리전을 설정합니다.
 CLUSTER_NAME=k8s-ml
-REGSION=ap-northeast-2
+REGION=ap-northeast-2
 
 # installing eksctl
 curl --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
@@ -106,6 +106,9 @@ eksctl create nodegroup --cluster $CLUSTER_NAME --name train-cpu --nodes-min 1 -
 # GPU worker node 구성
 eksctl create nodegroup --cluster $CLUSTER_NAME --name train-gpu --nodes-min 0 --nodes-max 1 --nodes 0 --node-labels "role=train-gpu" --node-type p3.2xlarge
 
+# 클러스터 확인
+kubectl get node -L role
+
 # installing helm client
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
 
@@ -128,13 +131,18 @@ EOF
 helm init --service-account default
 # Wait awhile
 
+# install helm charts
 kubectl create ns ctrl
 helm install charts/argo-workflow --namespace ctrl
-helm install charts/efs-provisioner
-helm install charts/minio
-helm install charts/cluster-autoscaler
-helm install charts/metrics-server
+helm install charts/nfs-client-provisioner --namespace ctrl
+helm install charts/minio --namespace ctrl
+helm install charts/cluster-autoscaler --namespace ctrl
+helm install charts/metrics-server --namespace ctrl
 
+kubectl get pod -n ctrl
+
+#helm install stable/metrics-server --name stats --namespace kube-system --set 'args={--logtostderr,--metric-resolution=2s}'
+#helm install stable/cluster-autoscaler --name autoscale --namespace kube-system --set autoDiscovery.clusterName=$CLUSTER_NAME,awsRegion=$REGION,sslCertPath=/etc/kubernetes/pki/ca.crt
 ```
 #### On GCP
 
@@ -150,7 +158,7 @@ https://console.cloud.google.com 접속
 ```bash
 gcloud config set compute/zone asia-northeast2-a
 
-CLUSTER_NAME=openinfra
+CLUSTER_NAME=k8s-ml
 
 gcloud container clusters create $CLUSTER_NAME \
     --cluster-version=1.13.7-gke.8 \
@@ -178,6 +186,8 @@ gcloud container node-pools create train-gpu \
     --max-nodes=1 \
     --machine-type=n1-highmem-2
 
+# 클러스터 확인
+kubectl get node -L role
 
 # installing helm client
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
@@ -201,15 +211,13 @@ EOF
 helm init --service-account default
 # Wait awhile
 
+# install helm charts
 kubectl create ns ctrl
 helm install charts/argo-workflow --namespace ctrl
-helm install charts/efs-provisioner
-helm install charts/minio
-helm install charts/cluster-autoscaler
-helm install charts/metrics-server
+helm install charts/nfs-client-provisioner --namespace ctrl
+helm install charts/minio --namespace ctrl
 
-#helm install stable/metrics-server --name stats --namespace kube-system --set 'args={--logtostderr,--metric-resolution=2s}'
-#helm install stable/cluster-autoscaler --name autoscale --namespace kube-system --set autoDiscovery.clusterName=$CLUSTER_NAME,awsRegion=$REGION,sslCertPath=/etc/kubernetes/pki/ca.crt
+kubectl get pod -n ctrl
 ```
 
 ### 콩동 설절
@@ -218,7 +226,6 @@ helm install charts/metrics-server
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.11/nvidia-device-plugin.yml
 ```
-
 
 ### 3. How to scale your ML job
 
