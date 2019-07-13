@@ -41,6 +41,41 @@ Production 환경에서 제대로 클러스터를 구축한다면 private k8s �
 - S3: 학습 데이터
 - VPC: default VPC
 
+#### IAM User 생성 및 권한 부여
+1. EKS Admin policy 생성
+*IAM 접속 - Policies - Create policy - JSON*
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": [
+          "ecr:*",
+          "ec2:*",
+          "eks:*",
+          "iam:*",
+          "cloudformation:*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+**엄청 나게 powerful한 권한이니 워크샵이 끝난 이후 삭제 바랍니다.**
+
+*Review policy*
+*Name*: EKS-admin
+
+2. User 생성
+*User name*: k8s-ml
+*Access type*: Programmatic access
+*Next Permissions*
+*Attach existing policies directly*: EKS-admin 검색
+*Next Tags* - *Next Review* - *Create user*
+
+
 #### 설치 목록
 
 ##### eksctl
@@ -74,6 +109,14 @@ helm chart는 helm을 통해 설치하는 패키지 레포지토리를 말합니
 http://console.aws.amazon.com
 
 ```bash
+# install awscli
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+/bin/bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda3 && rm Miniconda3-latest-Linux-x86_64.sh
+echo 'export PATH=$HOME/miniconda3/bin:$PATH' >> $HOME/.bashrc
+$HOME/miniconda3/bin/pip install awscli
+
+source $HOME/.bashrc
+
 # 클러스터 이름과 리전을 설정합니다.
 CLUSTER_NAME=k8s-ml
 REGION=ap-northeast-2
@@ -148,7 +191,7 @@ kubectl get pod -n ctrl
 
 사용할 리소스
 - GKE: k8s 마스터
-- GCE: bastion 서버, worker 노드
+- GCE: worker 노드
 - CLB: Ingress
 - GCR: ML scripts
 - FileStore: 모델 저장소
