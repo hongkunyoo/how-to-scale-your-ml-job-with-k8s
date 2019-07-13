@@ -5,9 +5,9 @@
 How to scale your ML job with Kubernetes
 
 ### 워크샵 순서
-[1. Why Kubernetes? (발표)](#1-why-kubernetes)
-2. Provisioning K8S on AWS / GCP  (핸즈온)
-3. Data pipeline 구축 & Distributed ML 학습하기 (핸즈온)
+1. [Why Kubernetes? (발표)](#1-why-kubernetes)
+2. [Provisioning K8S on AWS / GCP  (핸즈온)](#2-provisioning-k8s)
+3. [How to scale your ML job (핸즈온)](#3-how-to-scale-your-ml-job)
 
 ### Prequisition
 - AWS 계정 or GCP 계정
@@ -174,6 +174,10 @@ kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.1
 helm install stable/metrics-server --name stats --namespace kube-system --set 'args={--logtostderr,--metric-resolution=2s}'
 helm install stable/cluster-autoscaler --name autoscale --namespace kube-system --set autoDiscovery.clusterName=$CLUSTER_NAME,awsRegion=$REGION,sslCertPath=/etc/kubernetes/pki/ca.crt
 ```
+
+
+### 3. How to scaley our ML job
+
 #### Run ML jobs
 
 1. Basic Job
