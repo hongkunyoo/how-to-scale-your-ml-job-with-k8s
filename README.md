@@ -5,7 +5,7 @@
 How to scale your ML job with Kubernetes
 
 ## 워크샵 순서
-1. [Why Kubernetes? (발표)](#1-why-kubernetes)
+1. [Why Kubernetes? (간략 소개)](#1-why-kubernetes)
 2. [Provisioning K8S on AWS / GCP  (핸즈온)](#2-provisioning-k8s)
 3. [How to scale your ML job (핸즈온)](#3-how-to-scale-your-ml-job)
 
@@ -34,12 +34,12 @@ Production 환경에서 제대로 클러스터를 구축한다면 private k8s �
 
 사용할 리소스
 - EKS: k8s 마스터
-- EC2: bastion 서버, worker 노드
+- EC2: kubectl 명령 서버, worker 노드
 - ELB: Ingress
 - ECR: ML scripts
 - EFS: 모델 저장소
 - S3: 학습 데이터
-
+- VPC: default VPC
 
 #### 설치 목록
 
@@ -67,6 +67,12 @@ helm chart는 helm을 통해 설치하는 패키지 레포지토리를 말합니
 - metrics-server
 
 #### Setup
+
+가장 먼저 EKS 마스터에 명령을 전달할 EC2 서버 하나를 생성합니다. 본인의 PC에서 직접 작업을 진행하셔도 무방합니다.
+본 워크샵은 Ubuntu 18.04 위에서 정상적으로 동작하도록 구성이 되어 있습니다.
+먼저 kubectl 명령 서버를 하나 만들겠습니다.
+http://console.aws.amazon.com
+
 ```bash
 # 클러스터 이름과 리전을 설정합니다.
 CLUSTER_NAME=k8s-ml
