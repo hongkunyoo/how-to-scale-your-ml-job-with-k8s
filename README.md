@@ -42,44 +42,6 @@ Production 환경에서 제대로 클러스터를 구축한다면 private k8s �
 - S3: 학습 데이터
 - VPC: default VPC
 
-#### IAM User 생성 및 권한 부여
-1. EKS Admin policy 생성
-
-- *IAM 접속 - Policies - Create policy - JSON*
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "VisualEditor0",
-      "Effect": "Allow",
-      "Action": [
-          "ecr:*",
-          "ec2:*",
-          "eks:*",
-          "iam:*",
-          "elasticfilesystem:*",
-          "cloudformation:*"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-```
-**엄청 나게 강력한 권한이니 워크샵이 끝난 이후 삭제 바랍니다.**
-
-- *Review policy*
-- *Name*: EKS-admin
-
-2. User 생성
-
-- *User name*: k8s-ml
-- *Access type*: Programmatic access
-- *Next Permissions*
-- *Attach existing policies directly*: EKS-admin 검색
-- *Next Tags* - *Next Review* - *Create user*
-- Access key, Secret key 저장
-
 #### 설치 목록
 
 ##### eksctl
@@ -105,6 +67,45 @@ helm chart는 helm을 통해 설치하는 패키지 레포지토리를 말합니
 - cluster-autoscaler
 - metrics-server
 
+#### IAM User 생성 및 권한 부여
+1. EKS Admin policy 생성
+
+- *IAM 접속 - Policies - Create policy - JSON*
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": [
+          "ecr:*",
+          "ec2:*",
+          "eks:*",
+          "iam:*",
+          "s3:*",
+          "elasticfilesystem:*",
+          "cloudformation:*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+**엄청 나게 강력한 권한이니 워크샵이 끝난 이후 삭제 바랍니다.**
+
+- *Review policy*
+- *Name*: EKS-admin
+
+2. User 생성
+
+- *User name*: k8s-ml
+- *Access type*: Programmatic access
+- *Next Permissions*
+- *Attach existing policies directly*: EKS-admin 검색
+- *Next Tags* - *Next Review* - *Create user*
+- Access key, Secret key 저장
+
 #### Setup
 
 가장 먼저 EKS 마스터에 명령을 전달할 EC2 서버 하나를 생성합니다. 본인의 PC에서 직접 작업을 진행하셔도 무방합니다.
@@ -114,7 +115,7 @@ http://console.aws.amazon.com
 
 ```bash
 # install jq
-sudo apt-get install jq
+sudo apt-get update && sudo apt-get install -y jq
 
 # install awscli
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
@@ -133,10 +134,11 @@ aws configure
 # 클러스터 이름과 리전을 설정합니다.
 CLUSTER_NAME=k8s-ml
 
-FS_ID=$(aws efs create-file-system --creation-token $CLUSTER_NAME --profile k8s-ml | jq -r .FileSystemId)
+# Create EFS filesystem
+FS_ID=$(aws efs create-file-system --creation-token $CLUSTER_NAME | jq -r .FileSystemId)
 AWS_ID=$(aws sts get-caller-identity | jq -r .Account)
 
-BUCKET_NAME=k8s-ml-$(head -c 5 /dev/urandom | base64)
+BUCKET_NAME=k8s-ml-$RANDOM_LETTER
 aws s3 mb s3://$BUCKET_NAME
 
 # installing eksctl
