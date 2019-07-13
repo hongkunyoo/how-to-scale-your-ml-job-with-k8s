@@ -27,6 +27,8 @@ How to scale your ML job with Kubernetes
 
 ## 2. Provisioning K8S
 
+Production 환경에서 제대로 클러스터를 구축한다면 private k8s 구축 및 도메인 네임 설정 & Ingress 설정을 해야하지만 본 워크샵에서는 생략하도록 하겠습니다.
+
 ### On AWS
 
 사용할 리소스
@@ -62,7 +64,6 @@ helm chart는 helm을 통해 설치하는 패키지 레포지토리를 말합니
 - minio
 - cluster-autoscaler
 - metrics-server
-`- nginx-ingress`
 
 #### Setup
 ```bash
@@ -86,9 +87,6 @@ echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/s
 apt-get update
 apt-get install -y kubectl
 
-# installing helm client
-curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
-
 # Create k8s cluster
 eksctl create cluster --name $CLUSTER_NAME --region $REGION --without-nodegroup
 
@@ -100,6 +98,9 @@ eksctl create nodegroup --cluster $CLUSTER_NAME --name train-cpu --nodes-min 1 -
 
 # GPU worker node 구성
 eksctl create nodegroup --cluster $CLUSTER_NAME --name train-gpu --nodes-min 0 --nodes-max 1 --nodes 0 --node-labels "role=train-gpu" --node-type p3.2xlarge
+
+# installing helm client
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
 
 # RBAC setting
 cat <<EOF | kubectl create -f -
@@ -169,19 +170,46 @@ gcloud container node-pools create train-gpu \
     --num-nodes=0 \
     --max-nodes=1 \
     --machine-type=n1-highmem-2
+
+
+# installing helm client
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
+
+# RBAC setting
+cat <<EOF | kubectl create -f -
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: default-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: kube-system
+EOF
+
+helm init --service-account default
+# Wait awhile
+
+kubectl create ns ctrl
+helm install charts/argo-workflow --namespace ctrl
+helm install charts/efs-provisioner
+helm install charts/minio
+helm install charts/cluster-autoscaler
+helm install charts/metrics-server
+
+#helm install stable/metrics-server --name stats --namespace kube-system --set 'args={--logtostderr,--metric-resolution=2s}'
+#helm install stable/cluster-autoscaler --name autoscale --namespace kube-system --set autoDiscovery.clusterName=$CLUSTER_NAME,awsRegion=$REGION,sslCertPath=/etc/kubernetes/pki/ca.crt
 ```
 
+### 콩동 설절
 #### Enable GPU
 
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.11/nvidia-device-plugin.yml
-```
-
-#### Install helm packages
-
-```bash
-helm install stable/metrics-server --name stats --namespace kube-system --set 'args={--logtostderr,--metric-resolution=2s}'
-helm install stable/cluster-autoscaler --name autoscale --namespace kube-system --set autoDiscovery.clusterName=$CLUSTER_NAME,awsRegion=$REGION,sslCertPath=/etc/kubernetes/pki/ca.crt
 ```
 
 
