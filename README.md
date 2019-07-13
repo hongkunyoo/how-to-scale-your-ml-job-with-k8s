@@ -66,16 +66,16 @@ Production 환경에서 제대로 클러스터를 구축한다면 private k8s �
 ```
 **엄청 나게 강력한 권한이니 워크샵이 끝난 이후 삭제 바랍니다.**
 
-*Review policy*
-*Name*: EKS-admin
+- *Review policy*
+- *Name*: EKS-admin
 
 2. User 생성
 
-*User name*: k8s-ml
-*Access type*: Programmatic access
-*Next Permissions*
-*Attach existing policies directly*: EKS-admin 검색
-*Next Tags* - *Next Review* - *Create user*
+- *User name*: k8s-ml
+- *Access type*: Programmatic access
+- *Next Permissions*
+- *Attach existing policies directly*: EKS-admin 검색
+- *Next Tags* - *Next Review* - *Create user*
 
 
 #### 설치 목록
