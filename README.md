@@ -38,33 +38,33 @@ How to scale your ML job with Kubernetes
 - S3: 학습 데이터
 
 
-### 설치 목록
+#### 설치 목록
 
-#### eksctl
+##### eksctl
 [eksctl](https://github.com/weaveworks/eksctl)은 weaveworks에서 개발한 Amazon EKS CLI 툴입니다. 재밌는 것은 이것은 AWS에서 만든 것이 아니라 Kubernetes Network Provider중 하나인 weavenetwork를 만든 회사(Weaveworks)라는 회사에서 개발했다는 점입니다. 오늘 AWS 플랫폼 위에서는 eksctl을 이용하여 k8s 클러스터를 구축할 예정입니다.
 
-#### aws-iam-authenticator
+##### aws-iam-authenticator
 [aws-iam-authenticator](https://github.com/kubernetes-sigs/aws-iam-authenticator)도 마찬가지로 재밌는 사실은 원래는 heptio라는 회사에서 개발한 IAM 권한 획득 툴입니다. 현재는 kubernetes-sigs(special interest group)에서 관리합니다.
 EKS는 기본적으로 AWS IAM을 이용하여 k8s RBAC과 연동합니다. 이때 필요한 것이 aws-iam-authenticator라는 녀석입니다.  
 ![](https://docs.aws.amazon.com/eks/latest/userguide/images/eks-iam.png)
 
-#### kubectl
+##### kubectl
 [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)은 쿠버네티스 마스터와 대화할 수 있는 CLI툴입니다.
 
-#### helm
+##### helm
 [helm](https://helm.sh/)이란 쿠버네티스 package manager입니다. 해당 툴을 이용하여 필요한 모듈들을 쿠버네티스에 설치할 수 있습니다. apt, yum, pip 툴들과 비슷한 녀석이라고 생각하시면 됩니다.
 오늘 helm을 통해서 Distributed ML job에 필요한 패키지들을 설치해볼 예정입니다.
 
-#### helm chart
+##### helm chart
 helm chart는 helm을 통해 설치하는 패키지 레포지토리를 말합니다. 오늘은 다음 chart들을 설치해볼 예정입니다.
 - argo workflow
 - efs-provisioner
 - minio
 - cluster-autoscaler
 - metrics-server
-- nginx-ingress
+`- nginx-ingress`
 
-### Setup
+#### Setup
 ```bash
 # 클러스터 이름과 리전을 설정합니다.
 CLUSTER_NAME=k8s-ml
@@ -118,6 +118,15 @@ subjects:
 EOF
 
 helm init --service-account default
+# Wait awhile
+
+kubectl create ns ctrl
+helm install charts/argo-workflow --namespace ctrl
+helm install charts/efs-provisioner
+helm install charts/minio
+helm install charts/cluster-autoscaler
+helm install charts/metrics-server
+
 ```
 #### On GCP
 
