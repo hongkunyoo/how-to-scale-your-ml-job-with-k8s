@@ -9,7 +9,7 @@ base_href: /argo/
 service:
   port: 80
   targetPort: 8001
-  type: ClusterIP
+  type: LoadBalancer
 
 ingress:
   enabled: false

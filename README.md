@@ -115,6 +115,9 @@ helm chart는 helm을 통해 설치하는 패키지 레포지토리를 말합니
 http://console.aws.amazon.com
 
 ```bash
+# git clone
+git clone https://github.com/hongkunyoo/how-to-scale-your-ml-job-with-k8s.git
+
 # install jq
 sudo apt-get update && sudo apt-get install -y jq apt-transport-https
 
@@ -135,12 +138,6 @@ aws configure
 # 클러스터 이름과 리전을 설정합니다.
 CLUSTER_NAME=k8s-ml
 
-# Create EFS filesystem
-FS_ID=$(aws efs create-file-system --creation-token $CLUSTER_NAME | jq -r .FileSystemId)
-AWS_ID=$(aws sts get-caller-identity | jq -r .Account)
-
-BUCKET_NAME=k8s-ml-$RANDOM_LETTER
-aws s3 mb s3://$BUCKET_NAME
 
 # installing eksctl
 curl --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
@@ -164,13 +161,12 @@ eksctl create cluster --name $CLUSTER_NAME --without-nodegroup
 eksctl create nodegroup --cluster $CLUSTER_NAME --name default --nodes-min 1 --nodes-max 1 --nodes 1 --node-labels "role=default" --node-type m5.xlarge --asg-access
 
 # CPU worker node 구성
-eksctl create nodegroup --cluster $CLUSTER_NAME --name train-cpu --nodes-min 1 --nodes-max 3 --nodes 2 --node-labels "role=train-cpu" --node-type c5.xlarge
+eksctl create nodegroup --cluster $CLUSTER_NAME --name train-cpu --nodes-min 1 --nodes-max 3 --nodes 2 --node-labels "role=train-cpu" --node-type c5.xlarge --asg-access
 
 # GPU worker node 구성
-eksctl create nodegroup --cluster $CLUSTER_NAME --name train-gpu --nodes-min 0 --nodes-max 1 --nodes 0 --node-labels "role=train-gpu" --node-type p3.2xlarge
+eksctl create nodegroup --cluster $CLUSTER_NAME --name train-gpu --nodes-min 0 --nodes-max 1 --nodes 0 --node-labels "role=train-gpu" --node-type p3.2xlarge --asg-access
 
-NG_ID=$(eksctl get nodegroup --cluster $CLUSTER_NAME | cut -d ' ' -f1 | sed 1d | cut -f2)
-NG_STACK=eksctl-$CLUSTER_NAME-nodegroup-$NG_ID
+NG_STACK=eksctl-$CLUSTER_NAME-nodegroup-train-gpu
 ASG_ID=$(aws cloudformation describe-stack-resource --stack-name $NG_STACK --logical-resource-id NodeGroup --query StackResourceDetail.PhysicalResourceId --output text)
 REGION=$(aws configure get region)
 
@@ -178,6 +174,17 @@ aws autoscaling create-or-update-tags --tags ResourceId=$ASG_ID,ResourceType=aut
 
 # 클러스터 확인
 kubectl get node -L role
+
+# Create EFS filesystem
+FS_ID=$(aws efs create-file-system --creation-token $CLUSTER_NAME | jq -r .FileSystemId)
+AWS_ID=$(aws sts get-caller-identity | jq -r .Account)
+
+# Manage file system access
+# AWS console
+
+# Create S3 bucket
+BUCKET_NAME=k8s-ml-$RANDOM_LETTER
+aws s3 mb s3://$BUCKET_NAME
 
 # installing helm client
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
@@ -205,7 +212,7 @@ helm init --service-account default
 ```
 
 ```bash
-vi charts/nfs-client-provisioner/vales.yaml
+vi charts/nfs-client-provisioner/values.yaml
 ```
 
 ```yaml
@@ -215,7 +222,7 @@ nfs:
 ```
 
 ```bash
-vi charts/minio/vales.yaml
+vi charts/minio/values.yaml
 ```
 
 ```yaml

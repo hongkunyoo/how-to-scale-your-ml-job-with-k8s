@@ -44,7 +44,7 @@ priorityClassName: ""
 existingSecret: ""
 efsFileSystemId: !(FS_ID)
 accessKey: "admin"
-secretKey: "1234"
+secretKey: "1234qwer"
 configPath: "/root/.minio/"
 configPathmc: "/root/.mc/"
 mountPath: "/export"
