@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: mmcharts-argo-ui
+  name: argo-ui
 spec:
   selector:
     matchLabels:
@@ -37,7 +37,7 @@ spec:
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: mmcharts-workflow-controller
+  name: workflow-controller
 spec:
   selector:
     matchLabels:
