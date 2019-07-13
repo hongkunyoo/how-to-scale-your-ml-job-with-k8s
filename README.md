@@ -85,6 +85,7 @@ helm chart는 helm을 통해 설치하는 패키지 레포지토리를 말합니
           "iam:*",
           "s3:*",
           "elasticfilesystem:*",
+          "autoscaling:*",
           "cloudformation:*"
       ],
       "Resource": "*"
@@ -167,6 +168,13 @@ eksctl create nodegroup --cluster $CLUSTER_NAME --name train-cpu --nodes-min 1 -
 
 # GPU worker node 구성
 eksctl create nodegroup --cluster $CLUSTER_NAME --name train-gpu --nodes-min 0 --nodes-max 1 --nodes 0 --node-labels "role=train-gpu" --node-type p3.2xlarge
+
+NG_ID=$(eksctl get nodegroup --cluster $CLUSTER_NAME | cut -d ' ' -f1 | sed 1d | cut -f2)
+NG_STACK=eksctl-$CLUSTER_NAME-nodegroup-$NG_ID
+ASG_ID=$(aws cloudformation describe-stack-resource --stack-name $NG_STACK --logical-resource-id NodeGroup --query StackResourceDetail.PhysicalResourceId --output text)
+REGION=$(aws configure get region)
+
+aws autoscaling create-or-update-tags --tags ResourceId=$ASG_ID,ResourceType=auto-scaling-group,Key=k8s.io/cluster-autoscaler/node-template/label/role,Value=train-gpu,PropagateAtLaunch=true
 
 # 클러스터 확인
 kubectl get node -L role
