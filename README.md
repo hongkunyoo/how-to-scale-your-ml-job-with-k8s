@@ -193,6 +193,9 @@ EOF
 helm init --service-account default
 
 # before installing helm chart, change values
+```
+
+```bash
 vi charts/nfs-client-provisioner/vales.yaml
 ```
 
@@ -208,7 +211,7 @@ vi charts/minio/vales.yaml
 
 ```yaml
 # line 45
-efsFileSystemId: a(!FS_ID)
+efsFileSystemId: !(FS_ID)
 ```
 
 ```bash
