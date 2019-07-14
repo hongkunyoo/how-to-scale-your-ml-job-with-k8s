@@ -45,6 +45,8 @@ Production 환경에서 제대로 클러스터를 구축한다면 private k8s �
 
 ### On AWS
 
+![](res/aws.png)
+
 사용할 리소스
 - EKS: k8s 마스터
 - EC2: kubectl 명령 서버, worker 노드
