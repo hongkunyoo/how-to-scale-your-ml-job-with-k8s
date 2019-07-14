@@ -280,8 +280,6 @@ echo "This is your ECR repository: "$(aws sts get-caller-identity | jq -r .Accou
 
 ![](res/gcp.png)
 
-![](res/k8s-ml-gcp.png)
-
 사용할 리소스
 - GKE: k8s 마스터
 - GCE: worker 노드
@@ -289,6 +287,8 @@ echo "This is your ECR repository: "$(aws sts get-caller-identity | jq -r .Accou
 - GCR: ML scripts
 - FileStore: 모델 저장소
 - GCS: 학습 데이터
+
+![](res/k8s-ml-gcp.png)
 
 #### 설치 목록
 
