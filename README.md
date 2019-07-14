@@ -123,10 +123,11 @@ sudo apt-get update && sudo apt-get install -y jq apt-transport-https
 
 # install awscli
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-/bin/bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda3 && rm Miniconda3-latest-Linux-x86_64.sh && \
-echo 'export PATH=$HOME/miniconda3/bin:$PATH' >> $HOME/.bashrc && \
-$HOME/miniconda3/bin/pip install awscli && \
-source $HOME/.bashrc
+    /bin/bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda3 && \
+    rm Miniconda3-latest-Linux-x86_64.sh && \
+    echo 'export PATH=$HOME/miniconda3/bin:$PATH' >> $HOME/.bashrc && \
+    $HOME/miniconda3/bin/pip install awscli && \
+    source $HOME/.bashrc
 
 # AWS user configure
 aws configure
