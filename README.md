@@ -140,19 +140,20 @@ CLUSTER_NAME=k8s-ml
 
 
 # installing eksctl
-curl --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-sudo mv /tmp/eksctl /usr/local/bin
+curl --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | \
+    tar xz -C /tmp && \
+    sudo mv /tmp/eksctl /usr/local/bin
 
 # installing heptio-authenticator
-curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.11.5/2018-12-06/bin/linux/amd64/aws-iam-authenticator
-chmod +x ./aws-iam-authenticator
-sudo mv aws-iam-authenticator /usr/local/bin
+curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.11.5/2018-12-06/bin/linux/amd64/aws-iam-authenticator && \
+    chmod +x ./aws-iam-authenticator && \
+    sudo mv aws-iam-authenticator /usr/local/bin
 
 # installing kubectl
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
-sudo apt-get update
-sudo apt-get install -y kubectl
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - && \
+    echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list && \
+    sudo apt-get update && \
+    sudo apt-get install -y kubectl
 
 # Create k8s cluster
 eksctl create cluster --name $CLUSTER_NAME --without-nodegroup
