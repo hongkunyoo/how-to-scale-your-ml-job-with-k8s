@@ -6,10 +6,12 @@ How to scale your ML job with Kubernetes
 
 ## 워크샵 순서
 1. [Why Kubernetes? (간략 소개)](#1-why-kubernetes)
-2. Provisioning K8S(핸즈온)
+2. Provisioning K8S (핸즈온)
     - [on AWS](#on-aws)
     - [on GPC](#on-gcp)
-3. [How to scale your ML job (핸즈온)](#3-how-to-scale-your-ml-job)
+3. How to scale your ML job (핸즈온)
+    - A
+    - B
 
 ## Prequisition
 - AWS 계정 or GCP 계정
@@ -63,11 +65,11 @@ EKS는 기본적으로 AWS IAM을 이용하여 k8s RBAC과 연동합니다. 이�
 
 ##### helm chart
 helm chart는 helm을 통해 설치하는 패키지 레포지토리를 말합니다. 오늘은 다음 chart들을 설치해볼 예정입니다.
-- argo workflow
-- nfs-client-provisioner
-- minio
-- cluster-autoscaler
-- metrics-server
+- argo workflow: Data pipeline & ML workflow를 실행 시켜줄 wf engine입니다.
+- nfs-client-provisioner: NAS 서버(EFS)와 연결 시켜주는 Storage Provisioner입니다.
+- minio: NAS 서버를 웹으로 통해 볼 수 있게 minio UI를 사용합니다.
+- cluster-autoscaler: 요청한 자원 만큼 서버 리소스를 늘려주는 k8s autoscaler입니다.
+- metrics-server: 서버의 리소스 사용량을 확인하는 패키지입니다. (kubectl top node)
 
 #### IAM User 생성 및 권한 부여
 1. EKS Admin policy 생성
@@ -180,7 +182,6 @@ kubectl get node -L role
 
 # Create EFS filesystem
 FS_ID=$(aws efs create-file-system --creation-token $CLUSTER_NAME | jq -r .FileSystemId)
-AWS_ID=$(aws sts get-caller-identity | jq -r .Account)
 
 # Manage file system access
 # AWS console
@@ -260,6 +261,8 @@ spec:
       storage: 10Gi
   storageClassName: nfs-client
 EOF
+
+echo "This is your ECR repository: "$(aws sts get-caller-identity | jq -r .Account).dkr.ecr.ap-northeast-2.amazonaws.com/\$IMAGE_NAME
 ```
 
 ---
@@ -275,8 +278,21 @@ EOF
 - FileStore: 모델 저장소
 - GCS: 학습 데이터
 
+#### 설치 목록
+
+GCP에서는 Cloud Console이라는 훌륭한 콘솔이 기본적으로 제공되고 대부분 이미 설치가 되어 있기 때문에 필요한 helm chart만 바로 설치하면 됩니다.
+##### helm chart
+- argo workflow: Data pipeline & ML workflow를 실행 시켜줄 wf engine입니다.
+- nfs-client-provisioner: NAS 서버(EFS)와 연결 시켜주는 Storage Provisioner입니다.
+- minio: NAS 서버를 웹으로 통해 볼 수 있게 minio UI를 사용합니다.
+- ~~cluster-autoscaler~~: GCP 자체적으로 autoscale을 지원합니다. 단점은 세부적인 option 설정이 불가능합니다.
+- ~~metrics-server~~: GKE를 생성할때 metrics-server 설치 옵션을 넣으주면 자동으로 설치되어서 나옵니다.
+
+
 https://console.cloud.google.com 접속
 ```bash
+git clone https://github.com/hongkunyoo/how-to-scale-your-ml-job-with-k8s.git && cd how-to-scale-your-ml-job-with-k8s
+
 gcloud config set compute/zone asia-northeast2-a
 
 CLUSTER_NAME=k8s-ml
