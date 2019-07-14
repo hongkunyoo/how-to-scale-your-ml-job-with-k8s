@@ -276,7 +276,10 @@ echo "This is your ECR repository: "$(aws sts get-caller-identity | jq -r .Accou
 
 ---
 
-#### On GCP
+### On GCP
+
+![](res/gcp.png)
+
 ![](res/k8s-ml-gcp.png)
 
 사용할 리소스
@@ -397,7 +400,6 @@ kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/container
 
 kubectl get pod -n kube-system
 ```
-
 
 ## 3. How to scale your ML job with k8s
 
