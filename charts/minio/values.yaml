@@ -42,7 +42,6 @@ priorityClassName: ""
 ## Distributed Minio ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
 existingSecret: ""
-#nfsServer:  !(FS_ID).efs.ap-northeast-2.amazonaws.com
 nfsServer: 10.0.0.2
 nfsServerPath: /vol
 accessKey: "admin"

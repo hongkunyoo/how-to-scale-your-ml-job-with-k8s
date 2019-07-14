@@ -10,8 +10,6 @@ How to scale your ML job with Kubernetes
     - [on AWS](#on-aws)
     - [on GPC](#on-gcp)
 3. How to scale your ML job (핸즈온)
-    - A
-    - B
 
 ## Prequisition
 - AWS 계정 or GCP 계정
@@ -230,7 +228,7 @@ vi charts/minio/values.yaml
 
 ```yaml
 # line 45
-efsFileSystemId: !(FS_ID)
+nfsServer: !(FS_ID).efs.ap-northeast-2.amazonaws.com
 ```
 
 ```bash
@@ -356,7 +354,28 @@ gcloud filestore instances create nfs-server \
     --file-share=name="vol",capacity=1TB \
     --zone=us-central1-a \
     --network=name="default",reserved-ip-range="10.0.0.0/29"
+```
 
+```bash
+vi charts/nfs-client-provisioner/values.yaml
+```
+
+```yaml
+# line 14
+nfs:
+  server: 10.0.0.2
+```
+
+```bash
+vi charts/minio/values.yaml
+```
+
+```yaml
+# line 45
+nfsServer: 10.0.0.2
+```
+
+```bash
 # install helm charts
 helm install charts/argo-workflow --namespace kube-system
 helm install charts/nfs-client-provisioner --namespace kube-system
@@ -368,104 +387,30 @@ kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/container
 kubectl get pod -n kube-system
 ```
 
-### 3. How to scale your ML job
 
-#### Run ML jobs
+## 3. How to scale your ML job with k8s
 
-1. Basic Job
+### 1. Run a Basic Job
 
-```yaml
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: exp01-example
-spec:
-  template:
-    spec:
-      containers:
-      - name: ml
-        image: hongkunyoo/eks-ml:example
-        imagePullPolicy: Always
-        command: ["python", "train.py"]
-        args: ['5', 'softmax', '0.5']
-        resources:
-          requests:
-            cpu: "0.5"
-            memory: "3Gi"
-          limits:
-            cpu: "1"
-            memory: "5Gi"
-      restartPolicy: Never
-      nodeSelector:
-        role: train-gpu
-  backoffLimit: 0
-```
+### 2. Save a model file to model storage
 
-#### Build Data Pipeline
+### 3. Exception handling
 
-1. Workflow hello world
+### 4. Run multiple jobs
 
-```yaml
-apiVersion: argoproj.io/v1alpha1
-kind: Workflow                  # new type of k8s spec
-metadata:
-  generateName: hello-world-    # name of the workflow spec
-spec:
-  entrypoint: whalesay          # invoke the whalesay template
-  templates:
-  - name: whalesay              # name of the template
-    container:
-      image: docker/whalesay
-      command: [cowsay]
-      args: ["hello world"]
-      resources:                # limit the resources
-        limits:
-          memory: 32Mi
-          cpu: 100m
-```
+### 5. Training with hyper-parameters
 
-2. Multi step Data Pipeline
+### 6. Using GPUs
 
-```yaml
-apiVersion: argoproj.io/v1alpha1
-kind: Workflow
-metadata:
-  generateName: steps-
-spec:
-  entrypoint: hello-hello-hello
+### 7. Hello workflow
 
-  # This spec contains two templates: hello-hello-hello and whalesay
-  templates:
-  - name: hello-hello-hello
-    # Instead of just running a container
-    # This template has a sequence of steps
-    steps:
-    - - name: hello1            # hello1 is run before the following steps
-        template: whalesay
-        arguments:
-          parameters:
-          - name: message
-            value: "hello1"
-    - - name: hello2a           # double dash => run after previous step
-        template: whalesay
-        arguments:
-          parameters:
-          - name: message
-            value: "hello2a"
-      - name: hello2b           # single dash => run in parallel with previous step
-        template: whalesay
-        arguments:
-          parameters:
-          - name: message
-            value: "hello2b"
+### 8. Building ML Pipeline
 
-  # This is the same template as from the previous example
-  - name: whalesay
-    inputs:
-      parameters:
-      - name: message
-    container:
-      image: docker/whalesay
-      command: [cowsay]
-      args: ["{{inputs.parameters.message}}"]
-```
+### 9. Launch Jupyter notebook
+
+### 10. Kubeflow tutorials
+
+https://www.qwiklabs.com/focuses/5169?catalog_rank=%7B%22rank%22%3A2%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=2917675
+
+https://codelabs.developers.google.com/codelabs/kubeflow-introduction/index.html
+https://codelabs.developers.google.com/codelabs/cloud-kubeflow-e2e-gis/index.html
