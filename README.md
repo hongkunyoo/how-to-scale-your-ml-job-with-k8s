@@ -402,7 +402,8 @@ kubectl get pod -n kube-system
 ## 3. How to scale your ML job with k8s
 
 ### 1. Run a basic job
-[link](hands-on/01-run-job)
+설명
+[실습하기](hands-on/01-run-job)
 
 ### 2. Save a model file to model storage
 
