@@ -1,8 +1,8 @@
-# Open Infrastructure & Cloud Native Days Korea 2019 Track 7
+# Open Infra & Cloud Native Days Korea 2019 Track 7
 
 *Hands-on session*
 
-How to scale your ML job with Kubernetes
+How to scale your ML job with Kubernetes (커피고래 유홍근)
 
 ## 워크샵 순서
 1. [Why Kubernetes? (간략 소개)](#1-why-kubernetes)
@@ -401,7 +401,8 @@ kubectl get pod -n kube-system
 
 ## 3. How to scale your ML job with k8s
 
-### 1. Run a Basic Job
+### 1. Run a basic job
+[link](hands-on/01-run-job)
 
 ### 2. Save a model file to model storage
 
