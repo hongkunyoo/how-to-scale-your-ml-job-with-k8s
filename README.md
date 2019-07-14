@@ -6,7 +6,9 @@ How to scale your ML job with Kubernetes
 
 ## 워크샵 순서
 1. [Why Kubernetes? (간략 소개)](#1-why-kubernetes)
-2. [Provisioning K8S on AWS / GCP  (핸즈온)](#2-provisioning-k8s)
+2. Provisioning K8S(핸즈온)
+    - [on AWS](#on-aws)
+    - [on GPC](#on-gcp)
 3. [How to scale your ML job (핸즈온)](#3-how-to-scale-your-ml-job)
 
 ## Prequisition
@@ -208,11 +210,10 @@ EOF
 
 # installing helm
 helm init --service-account default
-
-# before installing helm chart, change values
 ```
 
 ```bash
+# before installing helm chart, change values
 vi charts/nfs-client-provisioner/values.yaml
 ```
 
@@ -332,10 +333,9 @@ helm init --service-account default
 # Wait awhile
 
 # install helm charts
-kubectl create ns ctrl
-helm install charts/argo-workflow --namespace ctrl
-helm install charts/nfs-client-provisioner --namespace ctrl
-helm install charts/minio --namespace ctrl
+helm install charts/argo-workflow --namespace kube-system
+helm install charts/nfs-client-provisioner --namespace kube-system
+helm install charts/minio --namespace kube-system
 
 kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.11/nvidia-device-plugin.yml
 kubectl get pod -n ctrl
