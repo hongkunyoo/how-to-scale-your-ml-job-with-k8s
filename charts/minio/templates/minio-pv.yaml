@@ -12,6 +12,6 @@ spec:
   - vers=4.1
   nfs:
     path: /
-    server: {{ .Values.efsFileSystemId }}.efs.{{ .Values.awsRegion }}.amazonaws.com
+    server: {{ .Values.nfsServer }}
   persistentVolumeReclaimPolicy: Delete
 
