@@ -107,7 +107,7 @@ helm chart는 helm을 통해 설치하는 패키지 레포지토리를 말합니
   ]
 }
 ```
-**엄청 나게 강력한 권한이니 워크샵이 끝난 이후 삭제 바랍니다.**
+**매우 강력한 권한이니 워크샵이 끝난 이후 삭제 바랍니다.**
 
 - *Review policy*
 - *Name*: EKS-admin
@@ -288,6 +288,7 @@ echo "This is your ECR repository: "$(aws sts get-caller-identity | jq -r .Accou
 - GCR: ML scripts
 - FileStore: 모델 저장소
 - GCS: 학습 데이터
+- VPC: default VPC
 
 ![](res/k8s-ml-gcp.png)
 
