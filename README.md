@@ -24,14 +24,14 @@ How to scale your ML job with Kubernetes
 - [video](https://www.youtube.com/watch?v=egv2TlfLL1Y&list=PLORxAVAC5fUXSZaun-15IvzUhO3YmvtdV)
 
 [워크샵 발표 내용](whyk8s.pdf) (사내 검토 중)
-![](intro.png)
+![](res/intro.png)
 
 ## 2. Provisioning K8S
 
 Production 환경에서 제대로 클러스터를 구축한다면 private k8s 구축 및 도메인 네임 설정 & Ingress 설정을 해야하지만 본 워크샵에서는 생략하도록 하겠습니다.
 
 ### On AWS
-![](k8s-ml-aws.png)
+![](res/k8s-ml-aws.png)
 
 사용할 리소스
 - EKS: k8s 마스터
@@ -233,22 +233,38 @@ efsFileSystemId: !(FS_ID)
 
 ```bash
 # install helm charts
-kubectl create ns ctrl
-helm install charts/argo-workflow --namespace ctrl
-helm install charts/nfs-client-provisioner --namespace ctrl
-helm install charts/minio --namespace ctrl
-helm install charts/cluster-autoscaler --namespace ctrl
-helm install charts/metrics-server --namespace ctrl
+helm install charts/argo-workflow --namespace kube-system
+helm install charts/nfs-client-provisioner --namespace kube-system
+helm install charts/minio --namespace kube-system
+helm install charts/cluster-autoscaler --namespace kube-system
+helm install charts/metrics-server --namespace kube-system
 
+# Apply NVIDIA plugin
 kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.11/nvidia-device-plugin.yml
 
-kubectl get pod -n ctrl
+# check all chart is running
+kubectl get pod -n kube-system
+
+# Create model storage PVC
+cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: model-storage
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: nfs-client
+EOF
 ```
 
 ---
 
 #### On GCP
-![](k8s-ml-gcp.png)
+![](res/k8s-ml-gcp.png)
 
 사용할 리소스
 - GKE: k8s 마스터
