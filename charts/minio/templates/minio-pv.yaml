@@ -7,11 +7,9 @@ spec:
   - ReadWriteMany
   capacity:
     storage: 1000Gi
-  storageClassName: aws-efs
-  mountOptions:
-  - vers=4.1
+  storageClassName: nfs-storage
   nfs:
-    path: /
+    path: {{ .Values.nfsServerPath }}
     server: {{ .Values.nfsServer }}
   persistentVolumeReclaimPolicy: Delete
 

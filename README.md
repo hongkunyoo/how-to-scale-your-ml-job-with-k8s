@@ -303,7 +303,7 @@ gcloud container clusters create $CLUSTER_NAME \
     --num-nodes=1 \
     --node-labels=role=default \
     --machine-type=n1-standard-4 \
-    --node-locations=us-central1-a,us-central1-b
+    --node-locations=us-central1-a
 
 
 gcloud container node-pools create train-cpu \
@@ -322,16 +322,14 @@ gcloud container node-pools create train-gpu \
     --min-nodes=0 \
     --num-nodes=0 \
     --max-nodes=1 \
-    --machine-type=n1-highmem-2
+    --accelerator type=nvidia-tesla-k80,count=1 \
+    --machine-type=n1-standard-4
 
 # 클러스터 확인
 kubectl get node -L role
 
 BUCKET_NAME=k8s-ml-$(echo $(curl -s "https://helloacm.com/api/random/?n=5&x=2")| tr -d \")
-gutils mb gs://$BUCKET_NAME
-
-# installing helm client
-curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
+gsutil mb gs://$BUCKET_NAME
 
 # RBAC setting
 cat <<EOF | kubectl create -f -
@@ -355,7 +353,7 @@ helm init --service-account default
 # Create Cloud FileStore
 gcloud filestore instances create nfs-server \
     --project=$DEVSHELL_PROJECT_ID \
-    --file-share=name="vol1",capacity=1TB \
+    --file-share=name="vol",capacity=1TB \
     --zone=us-central1-a \
     --network=name="default",reserved-ip-range="10.0.0.0/29"
 

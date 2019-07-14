@@ -12,7 +12,7 @@ image:
 
 nfs:
   server: !(FS_ID).efs.ap-northeast-2.amazonaws.com
-  path: /
+  path: /vol
   mountOptions:
 
 # For creating the StorageClass automatically:
@@ -28,7 +28,7 @@ storageClass:
 
   # Set a StorageClass name
   # Ignored if storageClass.create is false
-  name: nfs-client
+  name: nfs-storage
 
   # Allow volume to be expanded dynamically
   allowVolumeExpansion: true

@@ -44,12 +44,13 @@ priorityClassName: ""
 existingSecret: ""
 #nfsServer:  !(FS_ID).efs.ap-northeast-2.amazonaws.com
 nfsServer: 10.0.0.2
+nfsServerPath: /vol
 accessKey: "admin"
 secretKey: "1234qwer"
 configPath: "/root/.minio/"
 configPathmc: "/root/.mc/"
 mountPath: "/export"
-replicas: 4
+replicas: 1
 
 ## TLS Settings for Minio
 tls:
@@ -68,7 +69,7 @@ persistence:
   ## A manually managed Persistent Volume and Claim
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
-  existingClaim: minio-pvc
+  #existingClaim: minio-pvc
 
   ## minio data Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
@@ -79,10 +80,10 @@ persistence:
   ##
   ## Storage class of PV to bind. By default it looks for standard storage class.
   ## If the PV uses a different storage class, specify that here.
-  #storageClass: nfs-client
+  storageClass: nfs-storage
   # VolumeName: ""
-  #accessMode: ReadWriteMany
-  #size: 10Gi
+  accessMode: ReadWriteMany
+  size: 100Gi
 
   ## If subPath is set mount a sub folder of a volume instead of the root of the volume.
   ## This is especially handy for volume plugins that don't natively support sub mounting (like glusterfs).

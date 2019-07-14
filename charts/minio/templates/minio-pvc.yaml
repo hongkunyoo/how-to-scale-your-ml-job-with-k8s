@@ -8,5 +8,5 @@ spec:
   resources:
     requests:
       storage: 100Gi
-  storageClassName: aws-efs
+  storageClassName: nfs-storage
   volumeName: minio-pv
