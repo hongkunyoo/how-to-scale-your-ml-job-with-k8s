@@ -184,7 +184,7 @@ AWS_ID=$(aws sts get-caller-identity | jq -r .Account)
 # AWS console
 
 # Create S3 bucket
-BUCKET_NAME=k8s-ml-$RANDOM_LETTER
+BUCKET_NAME=k8s-ml-$(echo $(curl -s "https://helloacm.com/api/random/?n=5&x=2")| tr -d \")
 aws s3 mb s3://$BUCKET_NAME
 
 # installing helm client
@@ -239,6 +239,8 @@ helm install charts/nfs-client-provisioner --namespace ctrl
 helm install charts/minio --namespace ctrl
 helm install charts/cluster-autoscaler --namespace ctrl
 helm install charts/metrics-server --namespace ctrl
+
+kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.11/nvidia-device-plugin.yml
 
 kubectl get pod -n ctrl
 ```
@@ -319,15 +321,8 @@ helm install charts/argo-workflow --namespace ctrl
 helm install charts/nfs-client-provisioner --namespace ctrl
 helm install charts/minio --namespace ctrl
 
-kubectl get pod -n ctrl
-```
-
-### 공동설정
-
-#### Enable GPU
-
-```bash
 kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.11/nvidia-device-plugin.yml
+kubectl get pod -n ctrl
 ```
 
 ### 3. How to scale your ML job

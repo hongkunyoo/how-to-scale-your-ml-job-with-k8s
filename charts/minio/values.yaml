@@ -67,7 +67,7 @@ persistence:
   ## A manually managed Persistent Volume and Claim
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
-  #existingClaim: minio-pvc
+  existingClaim: minio-pvc
 
   ## minio data Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
@@ -86,7 +86,7 @@ persistence:
   ## If subPath is set mount a sub folder of a volume instead of the root of the volume.
   ## This is especially handy for volume plugins that don't natively support sub mounting (like glusterfs).
   ##
-  subPath: "/"
+  subPath: ""
 
 ## Expose the Minio service to be accessed from outside the cluster (LoadBalancer service).
 ## or access it from within the cluster (ClusterIP service). Set the service type and the port to serve it.

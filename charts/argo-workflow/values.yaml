@@ -4,7 +4,7 @@
 
 
 enable_web_console: true
-base_href: /argo/
+#base_href: /argo/
 
 service:
   port: 80
