@@ -362,7 +362,9 @@ helm install charts/argo-workflow --namespace kube-system
 helm install charts/nfs-client-provisioner --namespace kube-system
 helm install charts/minio --namespace kube-system
 
-kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.11/nvidia-device-plugin.yml
+# Install NVIDIA plugin
+kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/container-engine-accelerators/stable/nvidia-driver-installer/cos/daemonset-preloaded.yaml
+
 kubectl get pod -n kube-system
 ```
 
@@ -394,6 +396,8 @@ spec:
             cpu: "1"
             memory: "5Gi"
       restartPolicy: Never
+      nodeSelector:
+        role: train-gpu
   backoffLimit: 0
 ```
 

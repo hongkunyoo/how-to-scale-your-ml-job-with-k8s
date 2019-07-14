@@ -1,4 +1,4 @@
-apiVersion: batch/v1
+apkVersion: batch/v1
 kind: Job
 metadata:
   name: exp01-example
@@ -18,8 +18,13 @@ spec:
           limits:
             cpu: "1"
             memory: "5Gi"
+            nvidia.com/gpu: 1
       restartPolicy: Never
       nodeSelector:
         role: train-cpu
+#      tolerations:
+#      - key: nvidia.com/gpu
+#        value: present
+#        effect: NoSchedule
   backoffLimit: 0
 
