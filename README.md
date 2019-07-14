@@ -44,7 +44,6 @@ How to scale your ML job with Kubernetes (커피고래 유홍근)
 Production 환경에서 제대로 클러스터를 구축한다면 private k8s 구축 및 도메인 네임 설정 & Ingress 설정을 해야하지만 본 워크샵에서는 생략하도록 하겠습니다.
 
 ### On AWS
-![](res/k8s-ml-aws.png)
 
 사용할 리소스
 - EKS: k8s 마스터
@@ -54,6 +53,8 @@ Production 환경에서 제대로 클러스터를 구축한다면 private k8s �
 - EFS: 모델 저장소
 - S3: 학습 데이터
 - VPC: default VPC
+
+![](res/k8s-ml-aws.png)
 
 #### 설치 목록
 
