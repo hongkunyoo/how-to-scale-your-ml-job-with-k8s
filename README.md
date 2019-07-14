@@ -404,7 +404,7 @@ kubectl get pod -n kube-system
 ### 1. Run a basic job
 설명
 
-[lab](hands-on/01-run-job)
+[Go to lab](hands-on/01-run-job)
 
 ### 2. Save a model file to model storage
 
