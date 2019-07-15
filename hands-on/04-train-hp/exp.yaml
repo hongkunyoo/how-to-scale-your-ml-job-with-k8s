@@ -1,0 +1,4 @@
+args:
+  - 10        # epoch
+  - softmax   # activation
+  - 0.2       # dropout

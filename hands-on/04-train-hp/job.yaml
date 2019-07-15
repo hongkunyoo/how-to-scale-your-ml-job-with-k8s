@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: handson-02
+spec:
+  template:
+    spec:
+      containers:
+      - name: ml
+        image: 086558720570.dkr.ecr.ap-northeast-2.amazonaws.com/configmap
+        imagePullPolicy: Always
+        command: ["python", "train.py"]
+        volumeMounts:
+        - mountPath: "/model_hp/"
+          name: model-hp
+      restartPolicy: Never
+      #nodeSelector:
+      #  role: train-cpu
+      volumes:
+      - name: model-hp
+        configMap:
+          name: model-hp
+  backoffLimit: 0
+

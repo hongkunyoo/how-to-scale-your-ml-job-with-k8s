@@ -1,0 +1,27 @@
+apkVersion: batch/v1
+kind: Job
+metadata:
+  name: exp01-example
+spec:
+  template:
+    spec:
+      containers:
+      - name: ml
+        image: hongkunyoo/eks-ml:example
+        imagePullPolicy: Always
+        command: ["python", "train.py"]
+        args: ['5', 'softmax', '0.5']
+        resources:
+          limits:
+            cpu: "1"
+            memory: "5Gi"
+            nvidia.com/gpu: 1
+      restartPolicy: Never
+      nodeSelector:
+        role: train-gpu
+      tolerations:
+      - key: nvidia.com/gpu
+        value: present
+        effect: NoSchedule
+  backoffLimit: 0
+

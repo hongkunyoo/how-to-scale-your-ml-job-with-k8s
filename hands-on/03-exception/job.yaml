@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: handson-03
+spec:
+  template:
+    spec:
+      containers:
+      - name: ml
+        image: $IMAGE
+        imagePullPolicy: Always
+        command: ["python", "-u", "train-oom.py"]
+        args: ['20', 'softmax', '0.5']
+        resources:
+          requests:
+            cpu: "0.5"
+            memory: "3Gi"
+          limits:
+            cpu: "1"
+            memory: "5Gi"
+      restartPolicy: Never
+  backoffLimit: 0
+

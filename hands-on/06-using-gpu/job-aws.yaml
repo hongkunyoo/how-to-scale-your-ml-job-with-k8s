@@ -12,19 +12,12 @@ spec:
         command: ["python", "train.py"]
         args: ['5', 'softmax', '0.5']
         resources:
-          requests:
-            cpu: "0.5"
-            memory: "3Gi"
           limits:
             cpu: "1"
             memory: "5Gi"
             nvidia.com/gpu: 1
       restartPolicy: Never
       nodeSelector:
-        role: train-cpu
-#      tolerations:
-#      - key: nvidia.com/gpu
-#        value: present
-#        effect: NoSchedule
+        role: train-gpu
   backoffLimit: 0
 

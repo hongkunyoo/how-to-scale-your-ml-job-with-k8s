@@ -1,0 +1,25 @@
+apkVersion: batch/v1
+kind: Job
+metadata:
+  name: handson-02
+spec:
+  template:
+    spec:
+      containers:
+      - name: ml
+        image: $IMAGE
+        imagePullPolicy: Always
+        command: ["python", "train.py"]
+        args: ['5', 'softmax', '0.5']
+        volumeMounts:
+        - mountPath: "/model_storage"
+          name: model-storage
+      restartPolicy: Never
+      nodeSelector:
+        role: train-cpu
+      volumes:
+      - name: model-storage
+        persistentVolumeClaim:
+          claimName: model-storage
+  backoffLimit: 0
+

@@ -1,0 +1,18 @@
+apkVersion: batch/v1
+kind: Job
+metadata:
+  name: handson-01
+spec:
+  template:
+    spec:
+      containers:
+      - name: ml
+        image: $IMAGE
+        imagePullPolicy: Always
+        command: ["python", "train.py"]
+        args: ['5', 'softmax', '0.5']
+      restartPolicy: Never
+      nodeSelector:
+        role: train-cpu
+  backoffLimit: 0
+

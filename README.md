@@ -13,10 +13,11 @@ How to scale your ML job with Kubernetes (커피고래 유홍근)
     - Run a Basic Job
     - Save a model file to model storage
     - Exception handling
-    - Run multiple jobs
     - Training with hyper-parameters
+    - Run multiple jobs
     - Using GPUs
     - Hello workflow
+    - DAG workflow
     - Building ML Pipeline
     - Launch Jupyter notebook
     - Kubeflow tutorials
@@ -251,9 +252,6 @@ helm install charts/minio --namespace kube-system
 helm install charts/cluster-autoscaler --namespace kube-system
 helm install charts/metrics-server --namespace kube-system
 
-# Apply NVIDIA plugin
-kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.11/nvidia-device-plugin.yml
-
 # check all chart is running
 kubectl get pod -n kube-system
 
@@ -397,9 +395,6 @@ helm install charts/argo-workflow --namespace kube-system
 helm install charts/nfs-client-provisioner --namespace kube-system
 helm install charts/minio --namespace kube-system
 
-# Install NVIDIA plugin
-kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/container-engine-accelerators/stable/nvidia-driver-installer/cos/daemonset-preloaded.yaml
-
 kubectl get pod -n kube-system
 ```
 
@@ -414,19 +409,21 @@ kubectl get pod -n kube-system
 
 ### 3. Exception handling
 
-### 4. Run multiple jobs
+### 4. Training with hyper-parameters
 
-### 5. Training with hyper-parameters
+### 5. Run multiple jobs
 
 ### 6. Using GPUs
 
 ### 7. Hello workflow
 
-### 8. Building ML Pipeline
+### 8. DAG workflow
 
-### 9. Launch Jupyter notebook
+### 9. Building ML Pipeline
 
-### 10. Kubeflow tutorials
+### 10. Launch Jupyter notebook
+
+### 11. Kubeflow tutorials
 
 https://www.qwiklabs.com/focuses/5169?catalog_rank=%7B%22rank%22%3A2%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=2917675
 
