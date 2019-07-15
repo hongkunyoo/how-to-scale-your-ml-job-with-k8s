@@ -401,29 +401,44 @@ kubectl get pod -n kube-system
 ## 3. How to scale your ML job with k8s
 
 ### 1. Run a basic job
-설명
+몸풀기! 간단한 `train.py` 코드를 이용하여 도커 이미지를 만들고 Job을 이용하여 실행해 보겠습니다.
 
 [Go to lab](hands-on/01-run-job)
 
 ### 2. Save a model file to model storage
 
+[Go to lab](hands-on/02-save-model)
+
 ### 3. Exception handling
+
+[Go to lab](hands-on/03-exception)
 
 ### 4. Training with hyper-parameters
 
+[Go to lab](hands-on/04-train-hp/)
+
 ### 5. Run multiple jobs
+
+[Go to lab](hands-on/05-run-multi/)
 
 ### 6. Using GPUs
 
+[Go to lab](hands-on/06-using-gpu/)
+
 ### 7. Hello workflow
+[Go to lab](hands-on/07-hello-wf/)
 
 ### 8. DAG workflow
+[Go to lab](hands-on/08-wf-dag/)
 
 ### 9. Building ML Pipeline
+[Go to lab](hands-on/09-ml-pipeline/)
 
 ### 10. Launch Jupyter notebook
+[Go to lab](hands-on/10-jupyter/)
 
 ### 11. Kubeflow tutorials
+[Go to lab](hands-on/11-kubeflow/)
 
 https://www.qwiklabs.com/focuses/5169?catalog_rank=%7B%22rank%22%3A2%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&parent=catalog&search_id=2917675
 
