@@ -82,6 +82,9 @@ helm chart는 helm을 통해 설치하는 패키지 레포지토리를 말합니
 - cluster-autoscaler: 요청한 자원 만큼 서버 리소스를 늘려주는 k8s autoscaler입니다.
 - metrics-server: 서버의 리소스 사용량을 확인하는 패키지입니다. (kubectl top node)
 
+<details>
+  <summary>상세 설멍</summary>
+
 #### IAM User 생성 및 권한 부여
 1. EKS Admin policy 생성
 
@@ -272,6 +275,8 @@ EOF
 
 echo "This is your ECR repository: "$(aws sts get-caller-identity | jq -r .Account).dkr.ecr.ap-northeast-2.amazonaws.com/\$IMAGE_NAME
 ```
+
+</details>
 
 ---
 
