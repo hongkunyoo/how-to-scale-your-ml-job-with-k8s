@@ -450,7 +450,7 @@ Argo workflow란 쿠버네티스 job끼리 서로 dependency를 가실 수 있�
 Argo workflow를 이용하여 DAG (Directed acyclic graph)를 만드는 법을 살펴보겠습니다.
 조금 복잡할 수도 있어서 따로 구분하여 hands-on을 준비하였습니다.
 
-### [9. Building ML Pipeline(hands-on/09-ml-pipeline/)
+### [9. Building ML Pipeline](hands-on/09-ml-pipeline/)
 Argo workflow를 이용하여 최종적으로 Data Pipeline을 만들어 보도록 하겠습니다.
 S3에서 데이터를 가져와서 병렬로 분산하여 기계학습을 실행하여 NAS storage에 학습된 모델을 저장하고 최종적으로 slack으로 알람이 가게끔 만들어 보겠습니다.
 
