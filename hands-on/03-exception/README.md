@@ -8,6 +8,8 @@ ML job이 몇개 되지 않으면 사람이 눈으로 직접 확인하거나 리
 Job을 정의할때 `resources` 필드를 사용하면 됩니다.
 이것을 설정하면 특정 잡에서 너무 많은 리소스를 잡아먹을때 그 영향이 서버 전체에 영향을 주지 않고 해당 job만 죽게 만들 수 있습니다.
 
+![](error.png)
+
 ```yaml
 apiVersion: batch/v1
 kind: Job

@@ -1,0 +1,99 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: {{ config['workflow_name'] }}
+spec:
+  entrypoint: entry
+  onExit: alarm-slack
+
+  ######################################
+  # Volumes
+  ######################################
+  volumeClaimTemplates:
+  - metadata:
+      name: workflow
+    spec:
+      accessModes:
+      - {{ config['access_mode'] }}
+      resources:
+        requests:
+          storage: {{ config['workflow_volume_size'] }}
+      storageClassName: {{ config['storage_class_name'] }}
+
+  volumes:
+  - name: workdir
+    persistentVolumeClaim:
+      claimName: {{ config['pvc_name'] }}
+
+  templates:
+  ######################################
+  # Definitions
+  ######################################
+  # Exit Handler
+  - name: alarm-slack
+    container:
+      image: alpine:latest
+      imagePullPolicy: Always
+      command: [sh, -c]
+      args: ["curl SLACK"]
+
+  # Step Definitions
+  {% for step_def in step_definitions %}
+  - name: {{ step_def['name'] }}
+    inputs:
+      parameters:
+        - name: step-name
+        - name: target
+        - name: args
+        {% for arg in step_def['args'] %}
+        - name: {{ arg }}
+        {% endfor %}
+    container:
+      imagePullPolicy: Always
+      image: {{ step_def['image'] }}
+      {% if step_def['args'] %}
+      args:
+        {% for arg in step_def['args'] %}
+        {% raw %}- "{{{% endraw %}inputs.parameters.{{arg}}{% raw %}}}"{% endraw %}
+        {% endfor %}
+      {% endif %}
+      - mountPath: /model_storage
+        name: workdir
+      - mountPath: /mm/workflow
+        name: workflow
+      resources:
+        limits:
+          memory: {{ memory_limit }}
+          cpu: {{ cpu_limit }}
+    nodeSelector:
+      role: {{ config['run_node_group'] }}
+  {% endfor %}
+
+  ######################################
+  # Workflows
+  ######################################
+  - name: entry
+    dag:
+      tasks:
+      {% for step in steps %}
+      - name: {{ step['step_name'] }}
+        template: {{ step['template'] }}
+        {% if step['args'] %}
+        arguments:
+            parameters:
+            {% for arg in step['args'] %}
+            - name: {{ arg['name'] }}
+              value: "{{ arg['value'] }}"
+            {% endfor %}
+            - name: agent-dir
+              value: shared-{{ step['step_name'] }}
+            - name: step-dir
+              value: step-{{ step['step_name'] }}
+        {% endif %}
+        {% if step['depends'] %}
+        dependencies:
+          {% for depend in step['depends'] %}
+          - {{ depend }}
+          {% endfor %}
+        {% endif %}
+      {% endfor %}

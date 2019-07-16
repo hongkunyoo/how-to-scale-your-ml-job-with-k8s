@@ -1,0 +1,155 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: ml-pipeline
+spec:
+  entrypoint: entry
+  onExit: alarm-slack
+
+  ######################################
+  # Volumes
+  ######################################
+  volumeClaimTemplates:
+  - metadata:
+      name: wf-storage
+    spec:
+      accessModes:
+      - ReadWriteMany
+      resources:
+        requests:
+          storage: 10Gi
+      storageClassName: nfs-storage
+
+  volumes:
+  - name: model-storage
+    persistentVolumeClaim:
+      claimName: model-storage
+
+  templates:
+  ######################################
+  # Definitions
+  ######################################
+  # Exit Handler
+  - name: alarm-slack
+    container:
+      image: alpine:latest
+      imagePullPolicy: Always
+      command: [sh, -c]
+      args: ["curl SLACK"]
+
+  # Step Definitions
+  - name: input
+    inputs:
+    container:
+      imagePullPolicy: Always
+      image: $INPUT_IMAGE
+      args:
+      - "BUCKET_NAME"  
+      - "/wf_storage"  
+      volumeMounts:
+      - mountPath: /model_storage
+        name: model-storage
+      - mountPath: /wf_storage
+        name: wf-storage
+      resources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+    nodeSelector:
+      role: train-cpu
+
+  - name: train
+    inputs:
+      parameters:
+      - name: epoch
+      - name: activate
+      - name: dropout
+    container:
+      imagePullPolicy: Always
+      image: $TRAIN_IMAGE
+      args:
+      - "{{ inputs.parameters.epoch }}"
+      - "{{ inputs.parameters.activate }}"
+      - "{{ inputs.parameters.dropout }}"
+      volumeMounts:
+      - mountPath: /model_storage
+        name: model-storage
+      - mountPath: /wf_storage
+        name: wf-storage
+      resources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+    nodeSelector:
+      role: train-gpu
+
+  - name: output
+    inputs:
+    container:
+      imagePullPolicy: Always
+      image: $INPUT_IMAGE
+      args:
+      - "BUCKET_NAME"  
+      - "/model_storage"  
+      volumeMounts:
+      - mountPath: /model_storage
+        name: model-storage
+      - mountPath: /wf_storage
+        name: wf-storage
+      resources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+    nodeSelector:
+      role: train-cpu
+
+  ######################################
+  # Workflows
+  ######################################
+  - name: entry
+    dag:
+      tasks:
+      - name: input-A
+        template: input
+      - name: train-01
+        template: train
+        arguments:
+          parameters:
+          - name: epoch
+            value: "10"
+          - name: activate
+            value: "relu"
+          - name: dropout
+            value: "0.1"
+        dependencies:
+          - input-A
+      - name: train-02
+        template: train
+        arguments:
+          parameters:
+          - name: epoch
+            value: "15"
+          - name: activate
+            value: "tanh"
+          - name: dropout
+            value: "0.5"
+        dependencies:
+          - input-A
+      - name: train-03
+        template: train
+        arguments:
+          parameters:
+          - name: epoch
+            value: "12"
+          - name: activate
+            value: "linear"
+          - name: dropout
+            value: "0.5"
+        dependencies:
+          - input-A
+      - name: output-B
+        template: output
+        dependencies:
+          - train-01
+          - train-02
+          - train-03

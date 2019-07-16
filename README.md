@@ -9,7 +9,7 @@ How to scale your ML job with Kubernetes (커피고래 유홍근)
 * 대상 청중
     - 쿠버네티스를 활용하여 ML job 실행에 관심 있으신 분
     - Kubernetes 기본 지식(pod, job 등)
-    - Job, Argo workflow, kubeflow 등을 실습할 예정입니다.
+    - Job, Argo workflow  등을 실습할 예정입니다.
 
 ## 워크샵 순서
 1. [Why Kubernetes? (간략 소개)](#1-why-kubernetes)
@@ -421,7 +421,7 @@ S3에서 데이터를 가져와서 병렬로 분산하여 기계학습을 실행
 ### [10. Launch Jupyter notebook](hands-on/10-jupyter/)
 JupyterHub를 이용하여 쿠버네티스 상에서 분석할 수 있는 환경을 구축해 보겠습니다.
 
-### [11. Kubeflow tutorials](hands-on/11-kubeflow/)
-Kubernetes + tensorflow 조합으로 탄생한 kubeflow에 대해서 간단하게 살펴보도록 하겠습니다.
-[kubeflow.org](https://kubeflow.org)
+### [11. Kubeflow tutorials](hands-on/11-kubeflow/) (Advanced)
+Kubernetes + tensorflow 조합으로 탄생한 kubeflow에 대해서 간단히 알아보고  
+이미 잘 만들어진 튜토리얼을 따라해 보겠습니다.
 
