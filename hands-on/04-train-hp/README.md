@@ -5,3 +5,13 @@
 쿠버네티스의 `ConfigMap`을 이용하여 모델 파라미터를 직접 파일로 마운트해서 사용해 보도록 하겠습니다.
 
 ![](configmap.png)
+
+### Creating Hyper Parameter file
+```bash
+kubectl create configmap model-hp --from-file=exp.yaml=exp.yaml
+```
+
+### Editing Hyper Parameters
+```bash
+kubectl edit configmap model-hp
+```
