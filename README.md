@@ -417,15 +417,16 @@ kubectl get pod -n kube-system
 [Go to lab](hands-on/01-run-job)
 
 ### 2. Save a model file to model storage
-NFS storage 타입  PVC를 생성하여 모델을 한곳에 모아서 관리할 수 있게 구성해 봅시다.
+NFS storage 타입 PVC를 생성하여 모델을 한곳에 모아서 관리할 수 있게 구성해 봅시다.
 
 [Go to lab](hands-on/02-save-model)
 
 ### 3. Exception handling
 인위적으로 Out of Memory 상황을 발생 시켜 쿠버네티스가 어떻게 handling하는지 확인해 보도록 하겠습니다.
+
 [Go to lab](hands-on/03-exception)
 
-### 4. Training with hyper-parameters
+### [4. Training with hyper-parameters](hands-on/04-train-hp)
 
 [Go to lab](hands-on/04-train-hp/)
 
