@@ -6,6 +6,10 @@
 3. `job.yaml`: Kubernetes Job을 새롭게 하나 생성합니다. 이때 `nodeSelector`를 `train-cpu`로 설정해줍니다.
 
 ```bash
+# docker build
+docker build . -t $IMAGE_NAME
+# docker push
+docker push $IMAGE_NAME
 # job 실행
 kubectl apply -f job.yaml
 # 어느 노드에서 실행이 되는가 확인
