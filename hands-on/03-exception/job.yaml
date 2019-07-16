@@ -19,5 +19,7 @@ spec:
             cpu: "1"
             memory: "5Gi"
       restartPolicy: Never
+      nodeSelector:
+        role: train-cpu
   backoffLimit: 0
 

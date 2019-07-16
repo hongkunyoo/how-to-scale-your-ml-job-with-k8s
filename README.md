@@ -240,7 +240,6 @@ nfsServer: !(FS_ID).efs.ap-northeast-2.amazonaws.com
 helm install charts/argo-workflow --namespace kube-system
 helm install charts/nfs-client-provisioner --namespace kube-system
 helm install charts/minio --namespace kube-system
-helm install charts/cluster-autoscaler --namespace kube-system
 helm install charts/metrics-server --namespace kube-system
 
 # check all chart is running
@@ -394,7 +393,7 @@ NFS storage 타입 PVC를 이용하여 filesystem에 저장하는 것 만으로 
 ### [4. Training with hyper-parameters](hands-on/04-train-hp)
 여러가지 종류의 하이퍼파라미터들을 실험해 보고 싶을때는 어떻게 하면 좋을까요?
 단순히 프로세스 파라미터 전달 방법 외에 다른 방법이 있을까요?
-ConfigMap을 이용하여 파일 기반의 모델 파라미터를 전달해 봅시다.
+`ConfigMap`을 이용하여 파일 기반의 모델 파라미터를 전달해 봅시다.
 
 ### [5. Run multiple jobs](hands-on/05-run-multi)
 복수의 기계학습 job을 동시에 실행 시켜봅니다. 다음과 같은 것을 확인해볼 예정입니다.

@@ -14,8 +14,8 @@ spec:
         - mountPath: "/model_hp/"
           name: model-hp
       restartPolicy: Never
-      #nodeSelector:
-      #  role: train-cpu
+      nodeSelector:
+        role: train-cpu
       volumes:
       - name: model-hp
         configMap:
