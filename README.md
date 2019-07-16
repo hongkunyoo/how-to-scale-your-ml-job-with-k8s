@@ -9,7 +9,7 @@ How to scale your ML job with Kubernetes (커피고래 유홍근)
 * 대상 청중
     - 쿠버네티스를 활용하여 ML job 실행에 관심 있으신 분
     - Kubernetes 기본 지식(pod, job 등)
-    - Job, Argo workflow, kubflow 등을 실습할 예정입니다.
+    - Job, Argo workflow, kubeflow 등을 실습할 예정입니다.
 
 ## 워크샵 순서
 1. [Why Kubernetes? (간략 소개)](#1-why-kubernetes)
@@ -154,7 +154,6 @@ aws configure
 # 클러스터 이름과 리전을 설정합니다.
 CLUSTER_NAME=k8s-ml
 
-
 # installing eksctl
 curl --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | \
     tar xz -C /tmp && \
@@ -179,15 +178,6 @@ eksctl create nodegroup --cluster $CLUSTER_NAME --name default --nodes-min 1 --n
 
 # CPU worker node 구성
 eksctl create nodegroup --cluster $CLUSTER_NAME --name train-cpu --nodes-min 1 --nodes-max 3 --nodes 2 --node-labels "role=train-cpu" --node-type c5.xlarge --asg-access
-
-# GPU worker node 구성
-eksctl create nodegroup --cluster $CLUSTER_NAME --name train-gpu --nodes-min 0 --nodes-max 1 --nodes 0 --node-labels "role=train-gpu" --node-type p3.2xlarge --asg-access
-
-NG_STACK=eksctl-$CLUSTER_NAME-nodegroup-train-gpu
-ASG_ID=$(aws cloudformation describe-stack-resource --stack-name $NG_STACK --logical-resource-id NodeGroup --query StackResourceDetail.PhysicalResourceId --output text)
-REGION=$(aws configure get region)
-
-aws autoscaling create-or-update-tags --tags ResourceId=$ASG_ID,ResourceType=auto-scaling-group,Key=k8s.io/cluster-autoscaler/node-template/label/role,Value=train-gpu,PropagateAtLaunch=true
 
 # 클러스터 확인
 kubectl get node -L role
@@ -256,21 +246,6 @@ helm install charts/metrics-server --namespace kube-system
 # check all chart is running
 kubectl get pod -n kube-system
 
-# Create model storage PVC
-cat <<EOF | kubectl create -f -
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: model-storage
-spec:
-  accessModes:
-  - ReadWriteMany
-  resources:
-    requests:
-      storage: 10Gi
-  storageClassName: nfs-client
-EOF
-
 echo "This is your ECR repository: "$(aws sts get-caller-identity | jq -r .Account).dkr.ecr.ap-northeast-2.amazonaws.com/\$IMAGE_NAME
 ```
 
@@ -335,16 +310,6 @@ gcloud container node-pools create train-cpu \
     --max-nodes=3 \
     --machine-type=n1-highcpu-8
 
-gcloud container node-pools create train-gpu \
-    --cluster $CLUSTER_NAME \
-    --node-labels=role=train-gpu \
-    --enable-autoscaling \
-    --min-nodes=0 \
-    --num-nodes=0 \
-    --max-nodes=1 \
-    --accelerator type=nvidia-tesla-k80,count=1 \
-    --machine-type=n1-standard-4
-
 # 클러스터 확인
 kubectl get node -L role
 
@@ -404,6 +369,8 @@ helm install charts/nfs-client-provisioner --namespace kube-system
 helm install charts/minio --namespace kube-system
 
 kubectl get pod -n kube-system
+
+echo "This is your GCR repository: "gcr.io/$(gcloud config get-value project)/IMAGE
 ```
 
 </details>
