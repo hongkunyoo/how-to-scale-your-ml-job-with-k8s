@@ -4,6 +4,13 @@
 
 How to scale your ML job with Kubernetes (커피고래 유홍근)
 
+* 워크샵 소요시간: 2시간~2시간30분
+* 준비 사항: AWS or GCP 계정
+* 대상 청중
+    - 쿠버네티스를 활용하여 ML job 실행에 관심 있으신 분
+    - Kubernetes 기본 지식(pod, job 등)
+    - Job, Argo workflow, kubflow 등을 실습할 예정입니다.
+
 ## 워크샵 순서
 1. [Why Kubernetes? (간략 소개)](#1-why-kubernetes)
 2. Provisioning K8S (핸즈온)
@@ -21,15 +28,6 @@ How to scale your ML job with Kubernetes (커피고래 유홍근)
     - Building ML Pipeline
     - Launch Jupyter notebook
     - Kubeflow tutorials
-
-
-## Prequisition
-- AWS 계정 or GCP 계정
-- Kubernetes 기본 지식
-  - Deployments
-  - Services
-  - Jobs
-  - PersistentVolumeClaims
 
 ## 1. Why Kubernetes?
 
@@ -83,7 +81,7 @@ helm chart는 helm을 통해 설치하는 패키지 레포지토리를 말합니
 - metrics-server: 서버의 리소스 사용량을 확인하는 패키지입니다. (kubectl top node)
 
 <details>
-  <summary><big>상세 설정 방법</big></summary>
+  <summary><b>상세 설정 방법</b></summary>
 
 #### IAM User 생성 및 권한 부여
 1. EKS Admin policy 생성
@@ -310,7 +308,7 @@ GCP에서는 Cloud Console이라는 훌륭한 콘솔이 기본적으로 제공�
 https://console.cloud.google.com 접속
 
 <details>
-  <summary>상세 설정 방법</summary>
+  <summary><b>상세 설정 방법</b></summary>
 
 ```bash
 git clone https://github.com/hongkunyoo/how-to-scale-your-ml-job-with-k8s.git && cd how-to-scale-your-ml-job-with-k8s
@@ -414,16 +412,17 @@ kubectl get pod -n kube-system
 ## 3. How to scale your ML job with k8s
 
 ### 1. Run a basic job
-몸풀기! 간단한 `train.py` 코드를 이용하여 도커 이미지를 만들고 Job을 이용하여 실행해 보겠습니다.
+몸풀기! 간단한 `train.py` 코드를 이용하여 도커 이미지를 만들고 Job을 이용하여 학습을 시켜보겠습니다.
 
 [Go to lab](hands-on/01-run-job)
 
 ### 2. Save a model file to model storage
+NFS storage 타입  PVC를 생성하여 모델을 한곳에 모아서 관리할 수 있게 구성해 봅시다.
 
 [Go to lab](hands-on/02-save-model)
 
 ### 3. Exception handling
-
+인위적으로 Out of Memory 상황을 발생 시켜 쿠버네티스가 어떻게 handling하는지 확인해 보도록 하겠습니다.
 [Go to lab](hands-on/03-exception)
 
 ### 4. Training with hyper-parameters
