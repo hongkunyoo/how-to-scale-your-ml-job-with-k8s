@@ -20,7 +20,32 @@ Argo는 아래와 같이 예쁜 workflow UI를 제공해 줍니다. 해당 UI를
 처음으로 workflow를 제작해보고 argo-ui를 통해 눈으로 직접 확인해 봅시다.
 
 ```bash
-kubectl apply -f 01-hello-wf.yaml
+cat << EOF | kubectl create -f -
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: hello-world
+spec:
+  # invoke the whalesay template with
+  # "hello world" as the argument
+  # to the message parameter
+  entrypoint: whalesay
+  arguments:
+    parameters:
+    - name: message
+      value: hello world
+
+  templates:
+  - name: whalesay
+    inputs:
+      parameters:
+      - name: message       # parameter declaration
+    container:
+      # run cowsay with that message input parameter as args
+      image: docker/whalesay
+      command: [cowsay]
+      args: ["{{inputs.parameters.message}}"]
+EOF
 ```
 
 ### 2. Steps
