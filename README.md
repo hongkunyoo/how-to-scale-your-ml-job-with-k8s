@@ -83,7 +83,7 @@ helm chart는 helm을 통해 설치하는 패키지 레포지토리를 말합니
 - metrics-server: 서버의 리소스 사용량을 확인하는 패키지입니다. (kubectl top node)
 
 <details>
-  <summary><b>상세 설정 방법</b></summary>
+  <summary><big>상세 설정 방법</big></summary>
 
 #### IAM User 생성 및 권한 부여
 1. EKS Admin policy 생성
