@@ -411,45 +411,53 @@ kubectl get pod -n kube-system
 
 ## 3. How to scale your ML job with k8s
 
-### 1. Run a basic job
+### [1. Run a basic job](hands-on/01-run-job)
 몸풀기! 간단한 `train.py` 코드를 이용하여 도커 이미지를 만들고 Job을 이용하여 학습을 시켜보겠습니다.
 
-[Go to lab](hands-on/01-run-job)
+### [2. Save a model file to model storage](hands-on/02-save-model)
+기계학습을 통해 얻어진 모델을 한곳에서 관리하고 싶을 때는 어떻게할 할수 있을까요?
+매번 S3로 모델을 업로드하는 것이 귀찮으신가요?
+NFS storage 타입 PVC를 이용하여 filesystem에 저장하는 것 만으로 모델을 한곳에 모아서 관리할 수 있게 구성해 봅시다.
 
-### 2. Save a model file to model storage
-NFS storage 타입 PVC를 생성하여 모델을 한곳에 모아서 관리할 수 있게 구성해 봅시다.
-
-[Go to lab](hands-on/02-save-model)
-
-### 3. Exception handling
+### [3. Exception handling](hands-on/03-exception)
+간혹 한개의 문제가 되는 학습 job 때문에 서버 전체에 장애가 발생하는 경우가 있습니다.
+쿠버네티스를 이용한다면 문제가 되는 job 하나만을 종료되게끔 만들 수 있습니다.
 인위적으로 Out of Memory 상황을 발생 시켜 쿠버네티스가 어떻게 handling하는지 확인해 보도록 하겠습니다.
 
-[Go to lab](hands-on/03-exception)
-
 ### [4. Training with hyper-parameters](hands-on/04-train-hp)
+여러가지 종류의 하이퍼파라미터들을 실험해 보고 싶을때는 어떻게 하면 좋을까요?
+단순히 프로세스 파라미터 전달 방법 외에 다른 방법이 있을까요?
+ConfigMap을 이용하여 파일 기반의 모델 파라미터를 전달해 봅시다.
 
-[Go to lab](hands-on/04-train-hp/)
+### [5. Run multiple jobs](hands-on/05-run-multi)
+복수의 기계학습 job을 동시에 실행 시켜봅니다. 다음과 같은 것을 확인해볼 예정입니다.
+- 스케줄링
+- Job 진행 상황
+- 모니터링
+- 에러처리
+- Autoscaling
 
-### 5. Run multiple jobs
+### [6. Using GPUs](hands-on/06-using-gpu/)
+쿠버네티스에서 GPU 자원을 사용하는 방법에 대해서 알아보도록 하겠습니다.
+특히나 GPU 자원은 비용이 비싸기 때문에 서버의 개수가 0개부터 시작하여 autoscaling이 되도록 설정해보겠습니다.
 
-[Go to lab](hands-on/05-run-multi/)
+### [7. Hello workflow](hands-on/07-hello-wf/)
+간단하게 Argo workflow에 대해서 알아보도록 하겠습니다.
+Argo workflow란 쿠버네티스 job끼리 서로 dependency를 가실 수 있게 만들어주는 프레임워크입니다.
+오늘 저희는 argo workflow를 이용하여 Data Pipeline을 만들어 볼 예정입니다.
 
-### 6. Using GPUs
+### [8. DAG workflow](hands-on/08-wf-dag/)
+Argo workflow를 이용하여 DAG (Directed acyclic graph)를 만드는 법을 살펴보겠습니다.
+조금 복잡할 수도 있어서 따로 구분하여 hands-on을 준비하였습니다.
 
-[Go to lab](hands-on/06-using-gpu/)
+### [9. Building ML Pipeline(hands-on/09-ml-pipeline/)]
+Argo workflow를 이용하여 최종적으로 Data Pipeline을 만들어 보도록 하겠습니다.
+S3에서 데이터를 가져와서 병렬로 분산하여 기계학습을 실행하여 NAS storage에 학습된 모델을 저장하고 최종적으로 slack으메세지 알람이 가게 만들어 보겠습니다.
 
-### 7. Hello workflow
-[Go to lab](hands-on/07-hello-wf/)
+### [10. Launch Jupyter notebook](hands-on/10-jupyter/)
+JupyterHub를 이용하여 쿠버네티스 상에서 분석할 수 있는 환경을 구축해 보겠습니다.
 
-### 8. DAG workflow
-[Go to lab](hands-on/08-wf-dag/)
-
-### 9. Building ML Pipeline
-[Go to lab](hands-on/09-ml-pipeline/)
-
-### 10. Launch Jupyter notebook
-[Go to lab](hands-on/10-jupyter/)
-
-### 11. Kubeflow tutorials
-[Go to lab](hands-on/11-kubeflow/)
+### [11. Kubeflow tutorials](hands-on/11-kubeflow/)
+Kubernetes + tensorflow 조합으로 탄생한 kubeflow에 대해서 간단하게 살펴보도록 하겠습니다.
+[kubeflow.org](kubeflow.org)
 
