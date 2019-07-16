@@ -22,8 +22,8 @@ EOF
 
 PVC 생성후 minio를 통해 생성된 PVC를 확인해 보겠습니다.
 ```bash
-kubectl get svc -nkube-system  --> external IP 확인
-``
+kubectl get svc -nkube-system  # --> external IP 확인
+```
 
 모델을 특정 위치에 저장하도록 `train.py`를 수정해 보겠습니다.
 
