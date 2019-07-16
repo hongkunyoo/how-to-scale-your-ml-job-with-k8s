@@ -6,7 +6,7 @@ Deep Learning 코드를 다운 받아서 실행시켜줬어야 합니다. 쿠버
 
 
 
-### AWS GPU worker node 구성
+### AWS - GPU worker node 구성
 ```bash
 eksctl create nodegroup --cluster $CLUSTER_NAME --name train-gpu --nodes-min 0 --nodes-max 1 --nodes 0 --node-labels "role=train-gpu" --node-type p3.2xlarge --asg-access
 
@@ -19,7 +19,7 @@ aws autoscaling create-or-update-tags --tags ResourceId=$ASG_ID,ResourceType=aut
 kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.11/nvidia-device-plugin.yml
 ```
 
-### GCP GPU worker node 구성
+### GCP - GPU worker node 구성
 
 ```bash
 gcloud container node-pools create train-gpu \
@@ -37,14 +37,16 @@ kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/container
 
 ---
 
-### AWS Run GPU job
+### AWS - Run GPU job
+
+GPU 노드를 선택할 수 있도록 `nodeSelector`를 수정해 줍니다.
 
 ```yaml
     nodeSelector:
       role: train-gpu
 ```
 
-### GCP Run GPU job
+### GCP - Run GPU job
 
 GCP에서는 한 클러스터에서 non-GPU node pool과 GPU node pool을 동시에 사용하면 GPU node pool에 다음과 같은 `taint`를 삽입한다고 합니다. 그렇기 때문에 아래의 `taint`에 대한 적절한 `tolerations` 설정을 해줘야 합니다.
 [참고자료](https://cloud.google.com/kubernetes-engine/docs/how-to/gpus#create)
