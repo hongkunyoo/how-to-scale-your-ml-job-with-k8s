@@ -237,7 +237,6 @@ nfsServer: !(FS_ID).efs.ap-northeast-2.amazonaws.com
 
 ```bash
 # install helm charts
-helm install charts/argo-workflow --namespace kube-system
 helm install charts/nfs-client-provisioner --namespace kube-system
 helm install charts/minio --namespace kube-system
 helm install charts/metrics-server --namespace kube-system
@@ -363,7 +362,6 @@ nfsServer: 10.0.0.2
 
 ```bash
 # install helm charts
-helm install charts/argo-workflow --namespace kube-system
 helm install charts/nfs-client-provisioner --namespace kube-system
 helm install charts/minio --namespace kube-system
 
