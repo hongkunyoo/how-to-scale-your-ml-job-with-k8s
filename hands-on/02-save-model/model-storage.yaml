@@ -8,4 +8,5 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: nfs-storage
+      #storageClassName: nfs-storage
+  storageClassName: aws-efs

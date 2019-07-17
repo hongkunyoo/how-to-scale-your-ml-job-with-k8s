@@ -188,10 +188,6 @@ FS_ID=$(aws efs create-file-system --creation-token $CLUSTER_NAME | jq -r .FileS
 # Manage file system access
 # AWS console
 
-# Create S3 bucket
-BUCKET_NAME=k8s-ml-$(echo $(curl -s "https://helloacm.com/api/random/?n=5&x=2")| tr -d \")
-aws s3 mb s3://$BUCKET_NAME
-
 # installing helm client
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
 
@@ -310,9 +306,6 @@ gcloud container node-pools create train-cpu \
 
 # 클러스터 확인
 kubectl get node -L role
-
-BUCKET_NAME=k8s-ml-$(echo $(curl -s "https://helloacm.com/api/random/?n=5&x=2")| tr -d \")
-gsutil mb gs://$BUCKET_NAME
 
 # RBAC setting
 cat <<EOF | kubectl create -f -

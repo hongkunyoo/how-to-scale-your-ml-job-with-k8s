@@ -18,7 +18,7 @@ spec:
       resources:
         requests:
           storage: 10Gi
-      storageClassName: nfs-storage
+      storageClassName: aws-efs
 
   volumes:
   - name: model-storage
@@ -32,20 +32,25 @@ spec:
   # Exit Handler
   - name: alarm-slack
     container:
-      image: alpine:latest
+      image: byrnedo/alpine-curl
       imagePullPolicy: Always
-      command: [sh, -c]
-      args: ["curl SLACK"]
+      command: [/bin/sh]
+      args:
+      - "-c"
+      - >
+         curl -X POST -H 'Content-type: application/json' --data '{"text": "Training Done!"}' "https://hooks.slack.com/services/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"
 
   # Step Definitions
   - name: input
     inputs:
     container:
       imagePullPolicy: Always
-      image: $INPUT_IMAGE
+      image: 086558720570.dkr.ecr.ap-northeast-2.amazonaws.com/mm/plz
+      command: ["python", "input.py"]
       args:
-      - "BUCKET_NAME"  
-      - "/wf_storage"  
+      - "mms-testresult"  
+      - "data.npz"  
+      - "/wf_storage/data.npz"  
       volumeMounts:
       - mountPath: /model_storage
         name: model-storage
@@ -64,13 +69,16 @@ spec:
       - name: epoch
       - name: activate
       - name: dropout
+      - name: data-path
     container:
       imagePullPolicy: Always
-      image: $TRAIN_IMAGE
+      image: 086558720570.dkr.ecr.ap-northeast-2.amazonaws.com/mm/plz
+      command: ["python", "train.py"]
       args:
-      - "{{ inputs.parameters.epoch }}"
-      - "{{ inputs.parameters.activate }}"
-      - "{{ inputs.parameters.dropout }}"
+      - "{{inputs.parameters.epoch}}"
+      - "{{inputs.parameters.activate}}"
+      - "{{inputs.parameters.dropout}}"
+      - "{{inputs.parameters.data-path}}"
       volumeMounts:
       - mountPath: /model_storage
         name: model-storage
@@ -87,9 +95,10 @@ spec:
     inputs:
     container:
       imagePullPolicy: Always
-      image: $INPUT_IMAGE
+      image: 086558720570.dkr.ecr.ap-northeast-2.amazonaws.com/mm/plz
+      command: ["python", "output.py"]
       args:
-      - "BUCKET_NAME"  
+      - "mms-testresult"  
       - "/model_storage"  
       volumeMounts:
       - mountPath: /model_storage
@@ -116,11 +125,13 @@ spec:
         arguments:
           parameters:
           - name: epoch
-            value: "10"
+            value: "1"
           - name: activate
             value: "relu"
           - name: dropout
             value: "0.1"
+          - name: data-path
+            value: "/wf_storage/data.npz"
         dependencies:
           - input-A
       - name: train-02
@@ -128,11 +139,13 @@ spec:
         arguments:
           parameters:
           - name: epoch
-            value: "15"
+            value: "2"
           - name: activate
             value: "tanh"
           - name: dropout
             value: "0.5"
+          - name: data-path
+            value: "/wf_storage/data.npz"
         dependencies:
           - input-A
       - name: train-03
@@ -140,11 +153,13 @@ spec:
         arguments:
           parameters:
           - name: epoch
-            value: "12"
+            value: "2"
           - name: activate
             value: "linear"
           - name: dropout
             value: "0.5"
+          - name: data-path
+            value: "/wf_storage/data.npz"
         dependencies:
           - input-A
       - name: output-B
