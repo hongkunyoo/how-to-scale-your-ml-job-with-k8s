@@ -92,10 +92,14 @@ spec:
       resources:
         limits:
           cpu: 1
-          memory: 1Gi
+          memory: 4Gi
+          nvidia.com/gpu: 1
     nodeSelector:
       role: train-gpu
-
+#    tolerations:
+#    - key: nvidia.com/gpu
+#      value: present
+#      effect: NoSchedule
   - name: output
     inputs:
     container:

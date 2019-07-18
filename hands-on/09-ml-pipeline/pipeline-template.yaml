@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: ml-pipeline-{{ wfIdx }}
+  name: handson-09-ml-pipeline-{{ wfIdx }}
 spec:
   entrypoint: entry
   onExit: alarm-slack
@@ -88,7 +88,7 @@ spec:
       resources:
         limits:
           cpu: 1
-          memory: 1Gi
+          memory: 4Gi
     nodeSelector:
       role: train-gpu
 #    tolerations:
