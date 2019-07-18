@@ -351,7 +351,7 @@ EOF
 helm init --service-account default
 
 # Create Cloud FileStore
-gcloud filestore instances create nfs-server \
+gcloud filestore instances create nfs-storage \
     --project=$DEVSHELL_PROJECT_ID \
     --file-share=name="vol",capacity=1TB \
     --zone=us-central1-a \

@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: ml-pipeline
+  name: handson-09-ml-pipeline
 spec:
   entrypoint: entry
   onExit: alarm-slack
@@ -51,6 +51,11 @@ spec:
       - !BUCKET_NAME
       - "data.npz"  
       - "/wf_storage"  
+      env:
+      - name: ACCESS_KEY
+        value: !ACCESS_KEY
+      - name: SECRET_KEY
+        value: !SECRET_KEY
       volumeMounts:
       - mountPath: /model_storage
         name: model-storage
@@ -100,6 +105,11 @@ spec:
       args:
       - !BUCKET_NAME
       - "/model_storage"  
+      env:
+      - name: ACCESS_KEY
+        value: !ACCESS_KEY
+      - name: SECRET_KEY
+        value: !SECRET_KEY
       volumeMounts:
       - mountPath: /model_storage
         name: model-storage

@@ -21,5 +21,5 @@ else:
 
 #s3 = boto3.client('s3')
 print('downloading %s' % object_name)
-s3.download_file(bucket_name, object_name, os.path.join(download_path, object_name)
+s3.download_file(bucket_name, object_name, os.path.join(download_path, object_name))
 print('download done')

@@ -10,7 +10,7 @@ spec:
         image: !IMAGE
         imagePullPolicy: Always
         command: ["python", "train.py"]
-        args: ['5', 'softmax', '0.5']
+        args: ['20', 'softmax', '0.5']
         resources:
           limits:
             cpu: "1"

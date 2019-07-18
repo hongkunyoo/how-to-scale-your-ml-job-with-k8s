@@ -28,6 +28,8 @@ gsutil mb gs://$BUCKET_NAME
 ### Script Test
 
 ```bash
+pip install -r requirements.txt
+
 # Download
 ACCESS_KEY=$ACCESS_KEY SECRET_KEY=$SECRET_KEY python 01_input.py $BUCKET_NAME, $OBJECT_KEY $DOWNLOAD_FULL_PATH
 

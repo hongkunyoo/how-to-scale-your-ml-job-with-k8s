@@ -50,7 +50,7 @@ EOF
 
 ### 2. Steps
 
-Job들을 한 step씩 차례대로 혹은 동시에 호출하는 예제입니다.
+Job들을 한 step씩 차례대로 혹은 병렬로 호출하는 예제입니다.
 
 ```bash
 cat << EOF | kubectl create -f -
@@ -63,6 +63,68 @@ spec:
 
   # This spec contains two templates: hello-hello-hello and whalesay
   templates:
+  - name: hello-hello-hello
+    # Instead of just running a container
+    # This template has a sequence of steps
+    steps:
+    - - name: hello1            # hello1 is run before the following steps
+        template: whalesay
+        arguments:
+          parameters:
+          - name: message
+            value: "hello"
+    - - name: hello2a           # double dash => run after previous step
+        template: whalesay
+        arguments:
+          parameters:
+          - name: message
+            value: "world"
+      - name: hello2b           # single dash => run in parallel with previous step
+        template: whalesay
+        arguments:
+          parameters:
+          - name: message
+            value: "other world"
+
+  # This is the same template as from the previous example
+  - name: whalesay
+    inputs:
+      parameters:
+      - name: message
+    container:
+      image: docker/whalesay
+      command: [cowsay]
+      args: ["{{inputs.parameters.message}}"]
+EOF
+```
+
+### 3. Exit Handler
+
+종료시 호출되는 exit-handler에 대해서 확인해 봅시다.
+
+```bash
+cat << EOF | kubectl create -f -
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: step-example
+spec:
+  entrypoint: hello-hello-hello
+  onExit: good-bye
+
+  # This spec contains two templates: hello-hello-hello and whalesay
+  templates:
+  ##########################################
+  # onExit
+  - name: good-bye
+    container:
+      image: docker/whalesay
+      command: [cowsay]
+      args:
+      - "Good bye!"
+  ##########################################
+
+
   - name: hello-hello-hello
     # Instead of just running a container
     # This template has a sequence of steps

@@ -1,12 +1,24 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: handson-07-steps
+  name: handson-07-exit-handler
 spec:
   entrypoint: hello-hello-hello
+  onExit: good-bye
 
   # This spec contains two templates: hello-hello-hello and whalesay
   templates:
+  ##########################################
+  # onExit
+  - name: good-bye
+    container:
+      image: docker/whalesay
+      command: [cowsay]
+      args:
+      - "Good bye!"
+  ##########################################
+
+
   - name: hello-hello-hello
     # Instead of just running a container
     # This template has a sequence of steps
@@ -39,3 +51,4 @@ spec:
       image: docker/whalesay
       command: [cowsay]
       args: ["{{inputs.parameters.message}}"]
+

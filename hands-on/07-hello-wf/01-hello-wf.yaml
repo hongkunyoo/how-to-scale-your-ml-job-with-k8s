@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: hello-world
+  name: handson-07-hello-wf
 spec:
   # invoke the whalesay template with
   # "hello world" as the argument
