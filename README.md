@@ -35,7 +35,7 @@ How to scale your ML job with Kubernetes (커피고래 유홍근)
 - [slide](https://www.slideshare.net/awskorea/amazon-eks-lg-aws-summit-seoul-2019)
 - [video](https://www.youtube.com/watch?v=egv2TlfLL1Y&list=PLORxAVAC5fUXSZaun-15IvzUhO3YmvtdV)
 
-[워크샵 발표 내용](whyk8s.pdf) (사내 검토 중)
+[워크샵 발표 내용](res/whyk8s.pdf)
 ![](res/intro.png)
 
 ## 2. Provisioning K8S
