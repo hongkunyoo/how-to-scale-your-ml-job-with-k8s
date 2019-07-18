@@ -1,5 +1,5 @@
 #FROM nvidia/cuda:9.0-cudnn7-runtime-ubuntu18.04
-FROM tensorflow/tensorflow:devel-gpu
+#FROM tensorflow/tensorflow:devel-gpu
 FROM python:3.6.8
 
 RUN apt-get update \

@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: {{ config['workflow_name'] }}
+  name: ml-pipeline-{{ wfIdx }}
 spec:
   entrypoint: entry
   onExit: alarm-slack
@@ -11,63 +11,111 @@ spec:
   ######################################
   volumeClaimTemplates:
   - metadata:
-      name: workflow
+      name: wf-storage
     spec:
       accessModes:
-      - {{ config['access_mode'] }}
+      - ReadWriteMany
       resources:
         requests:
-          storage: {{ config['workflow_volume_size'] }}
-      storageClassName: {{ config['storage_class_name'] }}
+          storage: 10Gi
+      storageClassName: nfs-storage
 
   volumes:
-  - name: workdir
+  - name: model-storage
     persistentVolumeClaim:
-      claimName: {{ config['pvc_name'] }}
+      claimName: model-storage
 
   templates:
   ######################################
-  # Definitions
+  # Templates
   ######################################
-  # Exit Handler
+  # onExit
   - name: alarm-slack
     container:
-      image: alpine:latest
+      image: byrnedo/alpine-curl
       imagePullPolicy: Always
-      command: [sh, -c]
-      args: ["curl SLACK"]
+      command: [/bin/sh]
+      args:
+      - "-c"
+      - >
+         curl -X POST -H 'Content-type: application/json' --data '{"text": "Training Done!"}' "{{ slack_url }}"
 
-  # Step Definitions
-  {% for step_def in step_definitions %}
-  - name: {{ step_def['name'] }}
+  - name: input
     inputs:
-      parameters:
-        - name: step-name
-        - name: target
-        - name: args
-        {% for arg in step_def['args'] %}
-        - name: {{ arg }}
-        {% endfor %}
     container:
       imagePullPolicy: Always
-      image: {{ step_def['image'] }}
-      {% if step_def['args'] %}
+      image: !IMAGE
+      command: ["python", "input.py"]
       args:
-        {% for arg in step_def['args'] %}
-        {% raw %}- "{{{% endraw %}inputs.parameters.{{arg}}{% raw %}}}"{% endraw %}
-        {% endfor %}
-      {% endif %}
+      - !BUCKET_NAME
+      - "data.npz"
+      - "/wf_storage/data.npz"
+      volumeMounts:
       - mountPath: /model_storage
-        name: workdir
-      - mountPath: /mm/workflow
-        name: workflow
+        name: model-storage
+      - mountPath: /wf_storage
+        name: wf-storage
       resources:
         limits:
-          memory: {{ memory_limit }}
-          cpu: {{ cpu_limit }}
+          cpu: 1
+          memory: 1Gi
     nodeSelector:
-      role: {{ config['run_node_group'] }}
-  {% endfor %}
+      role: train-cpu
+
+  - name: train
+    inputs:
+      parameters:
+      - name: epoch
+      - name: activate
+      - name: dropout
+      - name: data-path
+    container:
+      imagePullPolicy: Always
+      image: !IMAGE
+      command: ["python", "train.py"]
+      args:
+      {% raw %}
+      - "{{inputs.parameters.epoch}}"
+      - "{{inputs.parameters.activate}}"
+      - "{{inputs.parameters.dropout}}"
+      - "{{inputs.parameters.data-path}}"
+      {% endraw %}
+      volumeMounts:
+      - mountPath: /model_storage
+        name: model-storage
+      - mountPath: /wf_storage
+        name: wf-storage
+      resources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+    nodeSelector:
+      role: train-gpu
+#    tolerations:
+#    - key: nvidia.com/gpu
+#      value: present
+#      effect: NoSchedule
+
+  - name: output
+    inputs:
+    container:
+      imagePullPolicy: Always
+      image: !IMAGE
+      command: ["python", "output.py"]
+      args:
+      - !BUCKET_NAME
+      - "/model_storage"
+      volumeMounts:
+      - mountPath: /model_storage
+        name: model-storage
+      - mountPath: /wf_storage
+        name: wf-storage
+      resources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+    nodeSelector:
+      role: train-cpu
 
   ######################################
   # Workflows
@@ -75,25 +123,27 @@ spec:
   - name: entry
     dag:
       tasks:
+      - name: input-A
+        template: input
       {% for step in steps %}
-      - name: {{ step['step_name'] }}
-        template: {{ step['template'] }}
-        {% if step['args'] %}
+      - name: {{ step['name'] }}
+        template: train
         arguments:
             parameters:
-            {% for arg in step['args'] %}
-            - name: {{ arg['name'] }}
-              value: "{{ arg['value'] }}"
-            {% endfor %}
-            - name: agent-dir
-              value: shared-{{ step['step_name'] }}
-            - name: step-dir
-              value: step-{{ step['step_name'] }}
-        {% endif %}
-        {% if step['depends'] %}
+            - name: epoch
+              value: "{{ step['epoch'] }}"
+            - name: activate
+              value: "{{ step['activate'] }}"
+            - name: dropout
+              value: "{{ step['dropout'] }}"
+            - name: data-path
+              value: "{{ step['data-path'] }}"
         dependencies:
-          {% for depend in step['depends'] %}
-          - {{ depend }}
-          {% endfor %}
-        {% endif %}
+          - input-A
       {% endfor %}
+      - name: output-C
+        template: output
+        dependencies:
+        {% for step in steps -%}
+        - {{ step['name'] }}
+        {% endfor %}

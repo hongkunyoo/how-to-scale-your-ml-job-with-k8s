@@ -18,7 +18,7 @@ spec:
       resources:
         requests:
           storage: 10Gi
-      storageClassName: aws-efs
+      storageClassName: nfs-storage
 
   volumes:
   - name: model-storage
@@ -27,9 +27,9 @@ spec:
 
   templates:
   ######################################
-  # Definitions
+  # Templates
   ######################################
-  # Exit Handler
+  # onExit
   - name: alarm-slack
     container:
       image: byrnedo/alpine-curl
@@ -45,10 +45,10 @@ spec:
     inputs:
     container:
       imagePullPolicy: Always
-      image: 086558720570.dkr.ecr.ap-northeast-2.amazonaws.com/mm/plz
+      image: !IMAGE
       command: ["python", "input.py"]
       args:
-      - "mms-testresult"  
+      - !BUCKET_NAME
       - "data.npz"  
       - "/wf_storage/data.npz"  
       volumeMounts:
@@ -72,7 +72,7 @@ spec:
       - name: data-path
     container:
       imagePullPolicy: Always
-      image: 086558720570.dkr.ecr.ap-northeast-2.amazonaws.com/mm/plz
+      image: !IMAGE
       command: ["python", "train.py"]
       args:
       - "{{inputs.parameters.epoch}}"
@@ -95,10 +95,10 @@ spec:
     inputs:
     container:
       imagePullPolicy: Always
-      image: 086558720570.dkr.ecr.ap-northeast-2.amazonaws.com/mm/plz
+      image: !IMAGE
       command: ["python", "output.py"]
       args:
-      - "mms-testresult"  
+      - !BUCKET_NAME
       - "/model_storage"  
       volumeMounts:
       - mountPath: /model_storage
@@ -120,7 +120,7 @@ spec:
       tasks:
       - name: input-A
         template: input
-      - name: train-01
+      - name: train-B01
         template: train
         arguments:
           parameters:
@@ -134,7 +134,7 @@ spec:
             value: "/wf_storage/data.npz"
         dependencies:
           - input-A
-      - name: train-02
+      - name: train-B02
         template: train
         arguments:
           parameters:
@@ -148,7 +148,7 @@ spec:
             value: "/wf_storage/data.npz"
         dependencies:
           - input-A
-      - name: train-03
+      - name: train-B03
         template: train
         arguments:
           parameters:
@@ -162,9 +162,9 @@ spec:
             value: "/wf_storage/data.npz"
         dependencies:
           - input-A
-      - name: output-B
+      - name: output-C
         template: output
         dependencies:
-          - train-01
-          - train-02
-          - train-03
+          - train-B01
+          - train-B02
+          - train-B03
