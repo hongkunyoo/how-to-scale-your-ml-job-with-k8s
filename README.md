@@ -4,6 +4,7 @@
 
 How to scale your ML job with Kubernetes (커피고래 유홍근)
 
+* 내용: 데이터과학자, 분석가 입장에서 조금 더 편리하게 기계학습을 실험해 보고 여러 서버에 걸쳐서 손쉽게 기계학습 잡을 확장시키는 방법에 대해서 알아보도록 하겠습니다.
 * 워크샵 소요시간: 2시간~2시간30분
 * 준비 사항: AWS or GCP 계정
 * 난이도: 중
@@ -185,7 +186,9 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && 
        $(lsb_release -cs) \
        stable" && \
     sudo apt-get update && \
-    sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io && \
+    sudo usermod -aG docker $USER
+
 
 # Create k8s cluster
 eksctl create cluster --name $CLUSTER_NAME --without-nodegroup
@@ -194,7 +197,7 @@ eksctl create cluster --name $CLUSTER_NAME --without-nodegroup
 eksctl create nodegroup --cluster $CLUSTER_NAME --name default --nodes-min 1 --nodes-max 1 --nodes 1 --node-labels "role=default" --node-type m5.xlarge --asg-access
 
 # CPU worker node 구성
-eksctl create nodegroup --cluster $CLUSTER_NAME --name train-cpu --nodes-min 1 --nodes-max 3 --nodes 2 --node-labels "role=train-cpu" --node-type c5.xlarge --asg-access
+eksctl create nodegroup --cluster $CLUSTER_NAME --name train-cpu --nodes-min 1 --nodes-max 8 --nodes 2 --node-labels "role=train-cpu" --node-type c5.xlarge --asg-access
 
 # 클러스터 확인
 kubectl get node -L role
@@ -237,6 +240,7 @@ vi charts/nfs-client-provisioner/values.yaml
 # line 14
 nfs:
   server: !(FS_ID).efs.ap-northeast-2.amazonaws.com
+  path: /
 ```
 
 ```bash
@@ -246,6 +250,7 @@ vi charts/minio/values.yaml
 ```yaml
 # line 45
 nfsServer: !(FS_ID).efs.ap-northeast-2.amazonaws.com
+nfsServerPath: /
 ```
 
 ```bash
@@ -259,6 +264,7 @@ kubectl get pod -n kube-system
 
 echo "This is your ECR repository: "$(aws sts get-caller-identity | jq -r .Account).dkr.ecr.ap-northeast-2.amazonaws.com/\$IMAGE_NAME
 aws ecr create-repository --repository-name k8s-ml
+$(aws ecr get-login --no-include-email)
 ```
 
 </details>
@@ -319,7 +325,7 @@ gcloud container node-pools create train-cpu \
     --enable-autoscaling \
     --min-nodes=1 \
     --num-nodes=2 \
-    --max-nodes=3 \
+    --max-nodes=8 \
     --machine-type=n1-highcpu-8
 
 # 클러스터 확인
@@ -360,6 +366,7 @@ vi charts/nfs-client-provisioner/values.yaml
 # line 14
 nfs:
   server: 10.0.0.2
+  path: /vol
 ```
 
 ```bash
@@ -369,6 +376,7 @@ vi charts/minio/values.yaml
 ```yaml
 # line 45
 nfsServer: 10.0.0.2
+nfsServerPath: /vol
 ```
 
 ```bash

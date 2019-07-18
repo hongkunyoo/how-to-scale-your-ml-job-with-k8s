@@ -18,6 +18,8 @@ spec:
       storage: 10Gi
   storageClassName: nfs-storage
 EOF
+
+kubectl get pvc
 ```
 
 PVC 생성후 minio를 통해 생성된 PVC를 확인해 보겠습니다.
@@ -28,3 +30,6 @@ kubectl get svc -nkube-system  # --> external IP 확인
 모델을 특정 위치에 저장하도록 `train.py`를 수정해 보겠습니다.
 
 ![](02-pvc.png)
+
+### 확인사항
+`model-storage` PVC에 원하는 모델파일이 생성이 되었는지 minio를 통하여 확인

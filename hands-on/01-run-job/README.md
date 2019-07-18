@@ -12,8 +12,19 @@ docker build . -t $IMAGE_NAME
 docker push $IMAGE_NAME
 # job 실행
 kubectl apply -f job.yaml
+```
+
+### 확인사항
+
+#### 1. 어느 노드에서 돌고 있는지
+```bash
 # 어느 노드에서 실행이 되는가 확인
+kubectl get node -L role
 kubectl get pod -o wide
+```
+
+#### 2. 학습 로그 이상유무 확인
+```bash
 # 학습 log 확인
 kubectl logs -f $POD_NAME
 ```

@@ -6,12 +6,15 @@
 
 ![](configmap.png)
 
-### Creating Hyper Parameter file
+#### 1. Creating Hyper Parameter file
 ```bash
 kubectl create configmap model-hp --from-file=exp.yaml=exp.yaml
+kubectl get cm model-hp -oyaml
 ```
 
-### Editing Hyper Parameters
+#### 2. Editing Hyper Parameters
 ```bash
 kubectl edit configmap model-hp
 ```
+
+### 확인사항

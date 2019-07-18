@@ -22,7 +22,7 @@ with open('/model_hp/exp.yaml') as f:
 
 epochs, activate, dropout = exp['args']
 
-print(epochs, activate, dropout)
+print(exp)
 batch_size = 128
 num_classes = 10
 hidden = 512

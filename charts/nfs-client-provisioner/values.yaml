@@ -12,7 +12,7 @@ image:
 
 nfs:
   server: !(FS_ID).efs.ap-northeast-2.amazonaws.com
-  path: /vol
+  path: !PATH
   mountOptions:
 
 # For creating the StorageClass automatically:

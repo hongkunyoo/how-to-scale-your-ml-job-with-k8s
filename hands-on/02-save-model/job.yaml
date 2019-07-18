@@ -1,4 +1,4 @@
-apkVersion: batch/v1
+apiVersion: batch/v1
 kind: Job
 metadata:
   name: handson-02
@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
       - name: ml
-        image: $IMAGE
+        image: !IMAGE
         imagePullPolicy: Always
         command: ["python", "train.py"]
         args: ['5', 'softmax', '0.5']

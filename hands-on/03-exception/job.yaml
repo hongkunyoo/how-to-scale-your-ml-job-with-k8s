@@ -7,9 +7,9 @@ spec:
     spec:
       containers:
       - name: ml
-        image: $IMAGE
+        image: !IMAGE
         imagePullPolicy: Always
-        command: ["python", "-u", "train-oom.py"]
+        command: ["python", "-u", "train.py"]
         args: ['20', 'softmax', '0.5']
         resources:
           requests:

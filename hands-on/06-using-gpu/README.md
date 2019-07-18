@@ -8,14 +8,24 @@ Deep Learning 코드를 다운 받아서 실행시켜줬어야 합니다. 쿠버
 
 ### AWS - GPU worker node 구성
 ```bash
+# GPU worker node 생성
+CLUSTER_NAME=k8s-ml
 eksctl create nodegroup --cluster $CLUSTER_NAME --name train-gpu --nodes-min 0 --nodes-max 1 --nodes 0 --node-labels "role=train-gpu" --node-type p3.2xlarge --asg-access
 
+# 생성 확인
+eksctl get nodegroup --cluster $CLUSTER_NAME
+
+# k8s.io/cluster-autoscaler/node-template/label/role 라벨 부여
 NG_STACK=eksctl-$CLUSTER_NAME-nodegroup-train-gpu
 ASG_ID=$(aws cloudformation describe-stack-resource --stack-name $NG_STACK --logical-resource-id NodeGroup --query StackResourceDetail.PhysicalResourceId --output text)
 REGION=$(aws configure get region)
 
 aws autoscaling create-or-update-tags --tags ResourceId=$ASG_ID,ResourceType=auto-scaling-group,Key=k8s.io/cluster-autoscaler/node-template/label/role,Value=train-gpu,PropagateAtLaunch=true
 
+# GPU plugin 설치 
+# - Expose the number of GPUs on each nodes of your cluster
+# - Keep track of the health of your GPUs
+# - Run GPU enabled containers in your Kubernetes cluster.
 kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.11/nvidia-device-plugin.yml
 ```
 

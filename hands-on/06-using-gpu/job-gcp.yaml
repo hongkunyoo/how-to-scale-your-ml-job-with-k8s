@@ -1,13 +1,13 @@
-apkVersion: batch/v1
+apiVersion: batch/v1
 kind: Job
 metadata:
-  name: exp01-example
+  name: handson-06
 spec:
   template:
     spec:
       containers:
       - name: ml
-        image: hongkunyoo/eks-ml:example
+        image: !IMAGE
         imagePullPolicy: Always
         command: ["python", "train.py"]
         args: ['5', 'softmax', '0.5']

@@ -1,4 +1,4 @@
-- script: $IMAGE:model01
+- script: !IMAGE:model01
   args:
   - [10, softmax,  0.2]
   - [10, relu,     0.3]
@@ -8,7 +8,7 @@
   - [10, sigmoid,  0.8]
   - [10, selu,     0.9]
 
-- script: $IMAGE:model02
+- script: !IMAGE:model02
   args:
   args:
   - [10, softmax,  0.2]
@@ -19,7 +19,7 @@
   - [10, sigmoid,  0.8]
   - [10, selu,     0.9]
 
-- script: $IMAGE:model03
+- script: !IMAGE:model03
   args:
   - [10, softmax,  0.2]
   - [10, relu,     0.3]
@@ -29,7 +29,7 @@
   - [10, sigmoid,  0.8]
   - [10, selu,     0.9]
 
-- script: $IMAGE:oom
+- script: !IMAGE:oom
   args:
   - [10, softmax,  0.2]
   - [10, relu,     0.3]

@@ -63,4 +63,4 @@ print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 
 import datetime
-model.save('/model_storage/model-%s.h5' % datetime.datetime.now().strftime("%Y%m%d"))
+model.save('/model_storage/model-%s.h5' % datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))

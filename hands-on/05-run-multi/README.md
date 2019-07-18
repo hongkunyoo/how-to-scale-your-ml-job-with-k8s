@@ -50,3 +50,11 @@ kubectl logs -f $POD_NAME
 # cluster autoscaling 확인
 kubectl get node -L role
 ```
+
+### 확인사항
+- 쿠버네티스가 알아서 스케줄링 해주는지 (pending, running)
+- 자원 부족시 autoscaling이 되는지
+- 한눈에 job 상태를 확인할 수 있는지
+- 모니터링이 편리해졌는지 (리소스 사용량, 학습 로그)
+- 배포관리가 편리해졌는지
+- 장애에 견고해졌는지
