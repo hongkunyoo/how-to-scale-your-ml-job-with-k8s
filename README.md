@@ -414,7 +414,7 @@ S3에서 데이터를 가져와서 병렬로 분산하여 기계학습을 실행
 ### [10. Launch Jupyter notebook](hands-on/10-jupyter/)
 JupyterHub를 이용하여 쿠버네티스 상에서 분석할 수 있는 환경을 구축해 보겠습니다.
 
-### [11. Kubeflow tutorials](hands-on/11-kubeflow/) (Advanced)
+### [11. Kubeflow tutorials](hands-on/11-kubeflow/) (Advanced - GCP only)
 Kubernetes + tensorflow 조합으로 탄생한 kubeflow에 대해서 간단히 알아보고  
-이미 잘 만들어진 튜토리얼을 따라해 보겠습니다.
+codelab 튜토리얼에 대해서 소개해 드립니다.
 
