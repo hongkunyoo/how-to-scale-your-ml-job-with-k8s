@@ -42,8 +42,8 @@ priorityClassName: ""
 ## Distributed Minio ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
 existingSecret: ""
-nfsServer: 10.0.0.2
-nfsServerPath: /vol
+nfsServer: !NFS_HOST
+nfsServerPath: !PATH
 accessKey: "admin"
 secretKey: "1234qwer"
 configPath: "/root/.minio/"

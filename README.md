@@ -6,10 +6,12 @@ How to scale your ML job with Kubernetes (커피고래 유홍근)
 
 * 워크샵 소요시간: 2시간~2시간30분
 * 준비 사항: AWS or GCP 계정
+* 난이도: 중
 * 대상 청중
     - 쿠버네티스를 활용하여 ML job 실행에 관심 있으신 분
     - Kubernetes 기본 지식(pod, job 등)
     - Job, Argo workflow  등을 실습할 예정입니다.
+    - 이미 kubeflow 등 쿠버네티스를 이용한 ML툴을 사용해 보신 분들한테는 쉬울 수 있습니다.
 
 ## 워크샵 순서
 1. [Why Kubernetes? (간략 소개)](#1-why-kubernetes)
@@ -135,7 +137,13 @@ http://console.aws.amazon.com
 git clone https://github.com/hongkunyoo/how-to-scale-your-ml-job-with-k8s.git && cd how-to-scale-your-ml-job-with-k8s
 
 # install jq
-sudo apt-get update && sudo apt-get install -y jq apt-transport-https
+sudo apt-get update && \
+    sudo apt-get install -y jq apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common 
+
 
 # install awscli
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
@@ -169,6 +177,15 @@ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add
     echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list && \
     sudo apt-get update && \
     sudo apt-get install -y kubectl
+
+# install docker
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && \
+    sudo add-apt-repository \
+       "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+       $(lsb_release -cs) \
+       stable" && /
+    sudo apt-get update && /
+    sudo apt-get install docker-ce docker-ce-cli containerd.io
 
 # Create k8s cluster
 eksctl create cluster --name $CLUSTER_NAME --without-nodegroup
@@ -241,6 +258,7 @@ helm install charts/metrics-server --namespace kube-system
 kubectl get pod -n kube-system
 
 echo "This is your ECR repository: "$(aws sts get-caller-identity | jq -r .Account).dkr.ecr.ap-northeast-2.amazonaws.com/\$IMAGE_NAME
+aws ecr create-repository --repository-name k8s-ml
 ```
 
 </details>
