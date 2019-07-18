@@ -6,8 +6,8 @@ kubeflow는 Kubernetes위에서 쉽게 ML workflow를 디자인하고 그 workfl
 ### [Kubeflow](https://kubeflow.org/)
 Kubeflow is the machine learning toolkit for Kubernetes.
 Our goal is to make scaling machine learning (ML) models and deploying them to production as simple as possible, by letting Kubernetes do what it’s great at.
-![](https://miro.medium.com/max/1400/0*wfi6xk6h-yAWnyc_.png)
+![](https://cdn-ak.f.st-hatena.com/images/fotolife/h/hurutoriya/20180905/20180905135037.png)
 
 
-kubeflow 프로젝트가 Google 내부에서 시작된 프로젝트인 관계로 GCP 친화적으로 구성이 되어있습니다. 이 시간에 GCP 위에서 kubeflow를 설치해 보도록 하겠습니다.
+kubeflow 프로젝트가 Google 내부에서 시작된 프로젝트인 관계로 GCP 친화적으로 구성이 되어있습니다. 이 시간에 GCP 위에서 kubeflow를 설치해 보도록 하겠습니다.  
 [codelab](https://codelabs.developers.google.com/codelabs/cloud-kubeflow-e2e-gis/) 튜토리얼
