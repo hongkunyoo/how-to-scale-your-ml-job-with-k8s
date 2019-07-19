@@ -32,6 +32,8 @@ kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.1
 ### GCP - GPU worker node 구성
 
 ```bash
+# GPU worker node 생성
+CLUSTER_NAME=k8s-ml
 gcloud container node-pools create train-gpu \
     --cluster $CLUSTER_NAME \
     --node-labels=role=train-gpu \
@@ -42,6 +44,7 @@ gcloud container node-pools create train-gpu \
     --accelerator type=nvidia-tesla-k80,count=1 \
     --machine-type=n1-standard-4
 
+# GPU plugin 설치 
 kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/container-engine-accelerators/stable/nvidia-driver-installer/cos/daemonset-preloaded.yaml
 ```
 
