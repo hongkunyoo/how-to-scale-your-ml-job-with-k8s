@@ -1,6 +1,5 @@
-# Open Infra & Cloud Native Days Korea 2019 Track 7
-
 ![](https://img.shields.io/badge/HandsOn-Session-green.svg)
+# Open Infra & Cloud Native Days Korea 2019 Track 7
 
 ## How to scale your ML job with Kubernetes
 
