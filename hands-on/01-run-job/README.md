@@ -28,3 +28,9 @@ kubectl get pod -o wide
 # 학습 log 확인
 kubectl logs -f $POD_NAME
 ```
+
+### Do it more
+
+특정 노드에서 실해하고 싶다면 어떻게 해야할까요? 
+- `train-cpu`
+- `train-mem`

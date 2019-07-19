@@ -17,7 +17,7 @@ spec:
         args: ['%s', '%s', '%s']
         imagePullPolicy: Always
         resources:
-          limits:
+          requests:
             cpu: "1.2"
             memory: "4.2Gi"
       restartPolicy: Never

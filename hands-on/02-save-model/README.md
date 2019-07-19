@@ -31,5 +31,18 @@ kubectl get svc -nkube-system  # --> external IP 확인
 
 ![](02-pvc.png)
 
+#### 실행
+```bash
+docker build . -t !IMAGE:02
+docker push !IMAGE:02
+vim job.yaml # image 수정
+kubectl apply -f job.yaml
+```
+
 ### 확인사항
 `model-storage` PVC에 원하는 모델파일이 생성이 되었는지 minio를 통하여 확인
+
+
+### Do it more
+
+인위적으로 서로 다른 노드에 job을 실행시켜서 저장한 모델 파일이 어디서든 보이는지 확인해 보겠습니다.

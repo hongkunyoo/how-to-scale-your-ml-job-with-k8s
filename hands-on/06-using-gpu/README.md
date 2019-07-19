@@ -69,3 +69,7 @@ GCP에서는 한 클러스터에서 non-GPU node pool과 GPU node pool을 동시
       value: present
       effect: NoSchedule
 ```
+
+### Do it more (AWS only)
+
+cluster autoscaler에 직접 들어가서 어떤 옵션들을 수정할 수 있는지 알아봅시다.

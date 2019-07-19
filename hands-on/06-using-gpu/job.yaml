@@ -9,7 +9,7 @@ spec:
       - name: ml
         image: !IMAGE
         imagePullPolicy: Always
-        command: ["python", "train.py"]
+        command: ["python", "-u", "train.py"]
         args: ['20', 'softmax', '0.5']
         resources:
           limits:
@@ -17,11 +17,5 @@ spec:
             memory: "5Gi"
             nvidia.com/gpu: 1
       restartPolicy: Never
-      nodeSelector:
-        role: train-gpu
-      tolerations:
-      - key: nvidia.com/gpu
-        value: present
-        effect: NoSchedule
   backoffLimit: 0
 

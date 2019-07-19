@@ -33,11 +33,13 @@ spec:
             cpu: "1"
             memory: "5Gi"
       restartPolicy: Never
+      nodeSelector:
+        role: train-cpu
   backoffLimit: 0
 ```
 
 
 
-### 2. 서버 장애
+### Do it more
 
-서버 자체에도 장애를 발생 시켜봅시다. (임의 삭제) 
+학습하는 동안, 서버 자체에도 장애를 발생 시켜봅시다. (임의 삭제) 어떻게 동작할까요?

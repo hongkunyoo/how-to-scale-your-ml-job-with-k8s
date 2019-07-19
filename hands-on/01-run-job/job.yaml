@@ -12,7 +12,5 @@ spec:
         command: ["python", "train.py"]
         args: ['5', 'softmax', '0.5']
       restartPolicy: Never
-      nodeSelector:
-        role: train-cpu
   backoffLimit: 0
 

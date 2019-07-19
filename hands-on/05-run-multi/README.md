@@ -14,6 +14,7 @@
 
 ### AWS
 
+요청한 자원 만큼 서버 리소스를 늘려주는 k8s autoscaler를 설치해 봅시다.
 ```bash
 helm install charts/cluster-autoscaler --namespace kube-system
 ```
@@ -22,8 +23,10 @@ helm install charts/cluster-autoscaler --namespace kube-system
 GCP에서는 따로 cluster-autoscaler 패키지를 설치할 필요없이 플랫폼 차원에서 지원하는데요. (생성할때 `--enable-autoscaling)  
 단점으로는 autoscaling의 로그를 볼 수 없다는 점과 세밀한 옵션값을 전달할수 없습니다.
 
+
+#### 관련 파일
 - `experiments.yaml`: 사용자정의 학습 스크립트 및 모델 파라미터
-- `run-multi.py`: template을 두고 사용자가 정의한 정보들을 순차적으로 접어 넣어 job을 완성시킵니다. 
+- `run-multi.py`: template을 불러와 사용자가 정의한 정보들을 순차적으로 넣어 job을 완성시켜 쿠버네티스 마스터에 명령을 내립니다.
 
 ---
 #### How-to
@@ -58,3 +61,11 @@ kubectl get node -L role
 - 모니터링이 편리해졌는지 (리소스 사용량, 학습 로그)
 - 배포관리가 편리해졌는지
 - 장애에 견고해졌는지
+
+
+### Do it more
+
+- Worker node MAX 개수를 늘리고 싶으면 어떻게 할까요?
+- 일부는 `train-cpu`로 일부는 `train-mem` 노드로 각각 실행시켜 보려면 어떻게 해야 할까요?
+- 모델 파일이 `model-storage` PVC에 저장되도록 수정해 봅시다
+- `requests` field를 삭제하면 어떻게 될까요? 

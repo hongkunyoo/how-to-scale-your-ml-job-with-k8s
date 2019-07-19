@@ -6,7 +6,7 @@
 
 ![](configmap.png)
 
-#### 1. Creating Hyper Parameter file
+#### 1. Creating Hyper Parameter ConfigMap
 ```bash
 kubectl create configmap model-hp --from-file=exp.yaml=exp.yaml
 kubectl get cm model-hp -oyaml
@@ -17,4 +17,6 @@ kubectl get cm model-hp -oyaml
 kubectl edit configmap model-hp
 ```
 
-### 확인사항
+### Do it more
+
+여러 ML job에서 동일한 모델 파라미터를 이용해야 하는 경우 어떻게 할 수 있을까요?

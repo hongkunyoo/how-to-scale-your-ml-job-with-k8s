@@ -2,7 +2,7 @@
 
 [Argo](https://argoproj.github.io/argo/)는 쿠버네티스 workflow 프레임워크입니다. 쿠버네티스에는 아직 Job끼리의 선후관계를 나타내는 workflow를 설정하는 기능이 없습니다. 그렇기 때문에 Custom Resource Definition을 쿠버네티스를 확장시킨 Argo workflow에 대해 알아보겠습니다.  
 아래의 예제를 참고하시면 여러 종류의 workflow를 제작해 보실 수 있습니다.  
-[Argo workflow 예제](https://argoproj.github.io/docs/argo/examples/README.html)
+[Argo workflow 예제](https://github.com/argoproj/argo/blob/master/examples/README.md)
 
 Argo를 사용하기 위해 먼저 아래에 준비된 helm chart를 설치해 주시기 바랍니다.
 ```bash
@@ -24,7 +24,7 @@ cat << EOF | kubectl create -f -
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: hello-world
+  name: handson-07-hello-wf
 spec:
   # invoke the whalesay template with
   # "hello world" as the argument
@@ -57,7 +57,7 @@ cat << EOF | kubectl create -f -
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: step-example
+  name: handson-07-steps
 spec:
   entrypoint: hello-hello-hello
 
@@ -107,7 +107,7 @@ cat << EOF | kubectl create -f -
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: step-example
+  name: handson-07-exit-handler
 spec:
   entrypoint: hello-hello-hello
   onExit: good-bye
@@ -160,3 +160,12 @@ spec:
 EOF
 ```
 
+### Do it more
+
+#### 1. workfow의 결과를 Exit Handler가 받아서 메세지로 출력해 봅시다.
+
+[참고 자료](https://github.com/argoproj/argo/blob/master/examples/README.md#exit-handlers)
+
+#### 2. 아래와 같은 workflow를 제작해 봅시다.
+
+![](../08-wf-dag/dag.png)
