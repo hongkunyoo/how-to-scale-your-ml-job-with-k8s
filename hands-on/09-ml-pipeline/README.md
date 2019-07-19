@@ -69,3 +69,7 @@ kubectl apply -f pipeline.yaml
 3. template rendering을 합니다 --> 완성된 argo workflow 생성
 4. 완성된 yaml 파일을 쿠버네티스 마스터에 전달합니다.
 
+- 각 job 마다 개별적으로 node를 선택할 수 있게 바꿔 봅시다.
+- 각 job 마다 개별적으로 requests & limits를 설정할 수 있게 바꿔 봅시다.
+- 슬랙으로 성공/실패 여부를 전달해 봅시다.
+- train.py 안에 `hidden` 파라미터도 사용자가 값을 바꾸어 전달할 수 있게 수정해 봅시다.

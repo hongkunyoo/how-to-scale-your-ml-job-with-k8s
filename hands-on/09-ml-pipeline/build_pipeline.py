@@ -9,7 +9,6 @@ templateEnv = jinja2.Environment(loader=templateLoader)
 TEMPLATE_FILE = "pipeline-template.yaml"
 template = templateEnv.get_template(TEMPLATE_FILE)
 
-
 # Insert model experiments
 steps = []
 
@@ -31,8 +30,7 @@ steps.append({
 
 # Render template
 idx = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-rendered = template.render(wfIdx=idx, slack_url='abc', steps=steps)
-
+rendered = template.render(wfIdx=idx, slack_url="!SLACK_URL", steps=steps)
 
 # Apply workflow
 cmd = """cat << EOF | kubectl apply -f -
