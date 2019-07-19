@@ -1,8 +1,8 @@
-![](https://img.shields.io/badge/HandsOn-Session-green.svg)
 # Open Infra & Cloud Native Days Korea 2019 Track 7
 
 ## How to scale your ML job with Kubernetes
 
+![](https://img.shields.io/badge/HandsOn-Session-green.svg)
 * 내용: 데이터과학자, 분석가 입장에서 조금 더 편리하게 기계학습을 실험해 보고 여러 서버에 걸쳐서 손쉽게 기계학습 잡을 확장시키는 방법에 대해서 알아보도록 하겠습니다.
 * 워크샵 소요시간: 2시간~2시간30분
 * 준비 사항: AWS or GCP 계정
