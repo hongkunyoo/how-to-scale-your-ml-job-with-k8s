@@ -59,7 +59,8 @@ kubectl apply -f pipeline.yaml
 ```
 
 
-### 동적으로 pipeline 제작 하기
+### Do it more
+#### 동적으로 pipeline 제작 하기
 
 지금까지는 미리 workflow YAML 파일을 만들어서 워크플로우를 호출하였습니다. 이번에는 파이썬 스크립트를 이용하여 필요한 인자 및 모델 실험 개수를 원하는대로 늘릴 수 있게 만들어 봅시다.
 
