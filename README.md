@@ -197,7 +197,7 @@ eksctl create cluster --name $CLUSTER_NAME --without-nodegroup
 eksctl create nodegroup --cluster $CLUSTER_NAME --name default --nodes-min 1 --nodes-max 1 --nodes 1 --node-labels "role=default" --node-type m5.xlarge --asg-access
 
 # CPU worker node 구성
-eksctl create nodegroup --cluster $CLUSTER_NAME --name train-cpu --nodes-min 1 --nodes-max 8 --nodes 2 --node-labels "role=train-cpu" --node-type c5.xlarge --asg-access
+eksctl create nodegroup --cluster $CLUSTER_NAME --name train-cpu --nodes-min 1 --nodes-max 4 --nodes 2 --node-labels "role=train-cpu" --node-type c5.xlarge --asg-access
 
 # MEM worker node 구성
 eksctl create nodegroup --cluster $CLUSTER_NAME --name train-mem --nodes-min 1 --nodes-max 2 --nodes 1 --node-labels "role=train-mem" --node-type r5.xlarge  --asg-access
@@ -328,7 +328,7 @@ gcloud container node-pools create train-cpu \
     --enable-autoscaling \
     --min-nodes=1 \
     --num-nodes=2 \
-    --max-nodes=8 \
+    --max-nodes=4 \
     --machine-type=n1-highcpu-8
 
 

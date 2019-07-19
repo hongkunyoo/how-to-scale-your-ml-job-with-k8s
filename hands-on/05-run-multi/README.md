@@ -68,4 +68,4 @@ kubectl get node -L role
 - Worker node MAX 개수를 늘리고 싶으면 어떻게 할까요?
 - 일부는 `train-cpu`로 일부는 `train-mem` 노드로 각각 실행시켜 보려면 어떻게 해야 할까요?
 - 모델 파일이 `model-storage` PVC에 저장되도록 수정해 봅시다
-- `requests` field를 삭제하면 어떻게 될까요? 
+- `requests`와 `limits` field를 삭제하면 어떻게 될까요? 

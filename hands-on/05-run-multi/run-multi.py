@@ -20,6 +20,9 @@ spec:
           requests:
             cpu: "1.2"
             memory: "4.2Gi"
+          limits:
+            cpu: "1.2"
+            memory: "4.2Gi"
       restartPolicy: Never
       nodeSelector:
         role: train-cpu
