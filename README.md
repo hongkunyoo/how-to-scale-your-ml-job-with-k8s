@@ -200,7 +200,7 @@ eksctl create nodegroup --cluster $CLUSTER_NAME --name default --nodes-min 1 --n
 eksctl create nodegroup --cluster $CLUSTER_NAME --name train-cpu --nodes-min 1 --nodes-max 8 --nodes 2 --node-labels "role=train-cpu" --node-type c5.xlarge --asg-access
 
 # MEM worker node 구성
-eksctl create nodegroup --cluster $CLUSTER_NAME --name train-cpu --nodes-min 1 --nodes-max 2 --nodes 1 --node-labels "role=train-mem" --node-type r5.xlarge  --asg-access
+eksctl create nodegroup --cluster $CLUSTER_NAME --name train-mem --nodes-min 1 --nodes-max 2 --nodes 1 --node-labels "role=train-mem" --node-type r5.xlarge  --asg-access
 
 # 클러스터 확인
 kubectl get node -L role
