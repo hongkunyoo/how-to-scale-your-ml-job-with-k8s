@@ -8,7 +8,7 @@ cat << EOF | kubectl create -f -
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: dag-diamond
+  name: handson-08-dag
 spec:
   entrypoint: diamond
   templates:
