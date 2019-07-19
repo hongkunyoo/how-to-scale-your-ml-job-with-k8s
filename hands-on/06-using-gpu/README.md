@@ -42,7 +42,8 @@ gcloud container node-pools create train-gpu \
     --num-nodes=0 \
     --max-nodes=1 \
     --accelerator type=nvidia-tesla-k80,count=1 \
-    --machine-type=n1-standard-4
+    --machine-type=n1-standard-4 \
+    --zone=us-central1-a
 
 # GPU plugin 설치 
 kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/container-engine-accelerators/stable/nvidia-driver-installer/cos/daemonset-preloaded.yaml
