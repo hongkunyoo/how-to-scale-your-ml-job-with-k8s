@@ -45,3 +45,10 @@ EOF
 ```
 
 ![](dag.png)
+
+
+### Do it more
+
+아래와 같은 DAG를 제작해 볼까요?
+
+![](dag2.png)
