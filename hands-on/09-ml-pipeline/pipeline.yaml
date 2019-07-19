@@ -93,9 +93,8 @@ spec:
         limits:
           cpu: 1
           memory: 4Gi
-          nvidia.com/gpu: 1
     nodeSelector:
-      role: train-gpu
+      role: train-mem
 #    tolerations:
 #    - key: nvidia.com/gpu
 #      value: present

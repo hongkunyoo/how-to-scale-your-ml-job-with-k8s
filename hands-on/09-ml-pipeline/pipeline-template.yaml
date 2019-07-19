@@ -90,11 +90,7 @@ spec:
           cpu: 1
           memory: 4Gi
     nodeSelector:
-      role: train-gpu
-#    tolerations:
-#    - key: nvidia.com/gpu
-#      value: present
-#      effect: NoSchedule
+      role: train-mem
 
   - name: output
     inputs:
