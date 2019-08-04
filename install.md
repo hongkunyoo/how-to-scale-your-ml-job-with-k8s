@@ -28,5 +28,6 @@ sudo apt-get update && \
        stable" && \
     sudo apt-get update && \
     sudo apt-get install -y docker-ce docker-ce-cli containerd.io && \
-    sudo usermod -aG docker $USER
+    sudo usermod -aG docker $USER \
+&& curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
 ```
